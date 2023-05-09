@@ -6,5 +6,5 @@ import { inject } from '@vercel/analytics'
 inject()
 
 platformBrowserDynamic()
-    .bootstrapModule(AppModule)
-    .catch((err) => console.error(err))
+  .bootstrapModule(AppModule)
+  .catch((err) => console.error(err))
