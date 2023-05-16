@@ -1,14 +1,33 @@
-<div class="flex min-h-screen flex-col items-center justify-center py-6">
-  <div class="rounded bg-gray-800 p-8 text-white shadow-md">
+<div
+  class="flex min-h-screen flex-col items-center justify-center bg-background py-6"
+>
+  <div class="rounded bg-backgroundSecondary p-8 text-primary shadow-md">
     <p class="font-mono text-xl">
-      <span class="text-gray-500">{{ typedText }}</span>
-      <span class="text-red-500">{{ currentChar }}</span>
-      <span class="text-gray-300">{{ remainingText }}</span>
+      <span class="text-secondary">{{ typedText }}</span>
+      <span class="text-error">{{ currentChar }}</span>
+      <span class="text-primary">{{ remainingText }}</span>
     </p>
     <input
-      class="mt-4 w-full rounded bg-gray-700 p-2 text-white shadow"
+      class="mt-4 w-full rounded bg-backgroundTertiary p-2 text-primary shadow"
       [(ngModel)]="userTyping"
       (input)="onUserType($event)"
     />
   </div>
 </div>
+
+<!-- <div
+  class="flex min-h-screen flex-col items-center justify-center bg-background py-6"
+>
+  <div class="rounded bg-accent p-8 text-primary shadow-md">
+    <p class="font-mono text-xl">
+      <span class="text-secondary">{{ typedText }}</span>
+      <span class="text-hover">{{ currentChar }}</span>
+      <span class="text-highlight">{{ remainingText }}</span>
+    </p>
+    <input
+      class="mt-4 w-full rounded bg-backgroundSecondary p-2 text-primary shadow"
+      [(ngModel)]="userTyping"
+      (input)="onUserType($event)"
+    />
+  </div>
+</div> -->
