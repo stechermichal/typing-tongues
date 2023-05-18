@@ -1,13 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors')
+const { createThemes } = require('tw-colors')
 
 module.exports = {
   purge: ['./src/**/*.{html,ts}'],
   darkMode: false,
   content: [],
   theme: {
-    extend: {
-      colors: {
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [
+    createThemes({
+      dark: {
         background: colors.gray[900],
         backgroundSecondary: colors.gray[800],
         backgroundTertiary: colors.gray[700],
@@ -24,10 +31,6 @@ module.exports = {
         success: colors.green[400],
         muted: colors.gray[500],
       },
-    },
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
+    }),
+  ],
 }
