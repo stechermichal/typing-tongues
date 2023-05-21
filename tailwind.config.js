@@ -13,23 +13,19 @@ module.exports = {
     extend: {},
   },
   plugins: [
+    // both usage of tw-colors plugin and overly restrictive/descriptive names are necessary due to there being more than 2 themes
+    // TODO: what's the best way to apply themes inside the typing part? Should text-to-type be same color as main-color of the theme?
     createThemes({
       dark: {
-        background: colors.gray[900],
-        backgroundSecondary: colors.gray[800],
-        backgroundTertiary: colors.gray[700],
-        primary: colors.green[500],
-        secondary: colors.gray[600],
-        tertiary: colors.blue[600],
-        quaternary: colors.purple[600],
-        accent: colors.purple[400],
-        highlight: colors.blue[400],
-        hover: colors.purple[300],
-        error: colors.red[500],
-        info: colors.cyan[400],
-        warning: colors.yellow[400],
-        success: colors.green[400],
-        muted: colors.gray[500],
+        'bg-general': colors.gray[700], // main background
+        'bg-component': colors.gray[800], // background for general components, like footer, header, etc
+        'bg-button': colors.gray[600], // background for general components, like footer, header, etc
+        'main-color': colors.blue[400], // main text color (not typed)
+        'main-mute-color': colors.sky[300], // muted version of the color above
+        'text-typed': colors.slate[50], // color of the text that has been typed
+        'text-to-type': colors.slate[400], // color of the text that has to be typed
+        'text-error': colors.red[300], // mistakes
+        'text-highlight': colors.yellow[300], // letter that is currently being typed
       },
     }),
   ],
