@@ -3,9 +3,7 @@ const colors = require('tailwindcss/colors')
 const { createThemes } = require('tw-colors')
 
 module.exports = {
-  purge: ['./src/**/*.{html,ts}'],
-  darkMode: false,
-  content: [],
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {},
   },
