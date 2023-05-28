@@ -25,6 +25,17 @@ module.exports = {
         'text-error': colors.red[300], // mistakes
         'text-highlight': colors.yellow[300], // letter that is currently being typed
       },
+      light: {
+        'bg-general': colors.gray[100],
+        'bg-component': colors.gray[200],
+        'bg-button': colors.gray[300],
+        'main-color': colors.blue[600],
+        'main-mute-color': colors.sky[700],
+        'text-typed': colors.slate[900],
+        'text-to-type': colors.slate[700],
+        'text-error': colors.red[700],
+        'text-highlight': colors.yellow[700],
+      },
     }),
   ],
 }

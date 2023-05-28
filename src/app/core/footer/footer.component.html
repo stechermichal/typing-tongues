@@ -1,5 +1,6 @@
 <footer
-  class="flex items-center justify-center bg-bg-component p-4 text-main-color theme-dark"
+  class="flex items-center justify-center bg-bg-component p-4 text-main-color"
+  [ngClass]="theme$ | async"
 >
   <p>
     <a

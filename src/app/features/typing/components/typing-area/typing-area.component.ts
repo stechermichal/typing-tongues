@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
+import { Observable } from 'rxjs'
 import { TypingService } from 'src/app/core/services/typing.service'
+import { ThemeService } from '../../../../core/services/theme.service'
 
 @Component({
   selector: 'app-typing-area',
@@ -15,9 +17,14 @@ export class TypingAreaComponent implements OnInit {
   typedText = ''
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
+  theme$: Observable<string>
 
-  constructor(private typingService: TypingService) {}
-
+  constructor(
+    private typingService: TypingService,
+    private themeService: ThemeService
+  ) {
+    this.theme$ = this.themeService.theme$
+  }
   ngOnInit(): void {
     this.resetTyping()
   }
@@ -61,3 +68,30 @@ export class TypingAreaComponent implements OnInit {
     this.typingService.updateStats(this.wordsPerMinute, this.accuracy)
   }
 }
+// import { Component, OnInit } from '@angular/core'
+// import { TypingService } from 'src/app/core/services/typing.service'
+// // import { Observable } from 'rxjs'
+// // import { ThemeService } from '../../../../core/services/theme.service'
+
+// @Component({
+//   selector: 'app-typing-area',
+//   templateUrl: './typing-area.component.html',
+//   styleUrls: ['./typing-area.component.css'],
+// })
+// export class TypingAreaComponent implements OnInit {
+//   userTyping: string = ''
+//   startTime: number = 0
+//   wordsPerMinute: number = 0
+//   accuracy: number = 0
+//   textToType: string = 'The quick brown fox jumps over the lazy dog.'
+//   typedText = ''
+//   currentChar = this.textToType[0]
+//   remainingText = this.textToType.slice(1)
+//   // theme$: Observable<string>
+
+//   constructor(
+//     private typingService: TypingService
+//   ) // private themeService: ThemeService
+//   {
+//     // this.theme$ = this.themeService.theme$
+//   }

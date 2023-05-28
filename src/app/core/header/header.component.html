@@ -1,5 +1,5 @@
 <header
-  class="flex items-center justify-between bg-bg-component p-6 text-main-color theme-dark"
+  class="flex items-center justify-between bg-bg-component p-6 text-main-color"
 >
   <div class="text-main-color">
     <a href="/" class="text-2xl font-bold hover:text-main-mute-color"
@@ -14,5 +14,10 @@
     <a href="/typing" class="mx-3 text-main-color hover:text-main-mute-color"
       >Typing</a
     >
+    <!-- theme select button -->
+    <select #themeSelect (change)="switchTheme(themeSelect.value)">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
   </div>
 </header>
