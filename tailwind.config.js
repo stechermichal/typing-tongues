@@ -36,6 +36,17 @@ module.exports = {
         'text-error': colors.red[700],
         'text-highlight': colors.yellow[700],
       },
+      rainbowTest: {
+        'bg-general': colors.red[500],
+        'bg-component': colors.blue[400],
+        'bg-button': colors.yellow[800],
+        'main-color': colors.green[600],
+        'main-mute-color': colors.teal[400],
+        'text-typed': colors.violet[400],
+        'text-to-type': colors.slate[700],
+        'text-error': colors.red[700],
+        'text-highlight': colors.pink[300],
+      },
     }),
   ],
 }
