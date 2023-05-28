@@ -8,9 +8,5 @@ import { ThemeService } from '../services/theme.service'
   styleUrls: ['./footer.component.css'],
 })
 export class FooterComponent {
-  theme$: Observable<string>
-
-  constructor(private themeService: ThemeService) {
-    this.theme$ = this.themeService.theme$
-  }
+  constructor() {}
 }
