@@ -15,8 +15,8 @@
       >Typing</a
     >
     <!-- When the selected option changes, call the switchTheme method -->
-    <!-- Pass the selected theme value to the switchTheme method -->
-    <select #themeSelect (change)="switchTheme(themeSelect.value)">
+    <!-- Bind the selected value of the dropdown to the current theme -->
+    <select [(ngModel)]="themeService.theme">
       <option value="dark">Dark</option>
       <option value="light">Light</option>
       <option value="rainbowTest">RainbowTest</option>

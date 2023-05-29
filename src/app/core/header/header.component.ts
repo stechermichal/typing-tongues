@@ -7,11 +7,5 @@ import { ThemeService } from '../services/theme.service'
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
-  constructor(private themeService: ThemeService) {}
-
-  // Called when user selects a new theme from the dropdown
-  switchTheme(theme: string) {
-    // Pass the new theme value to the ThemeService
-    this.themeService.theme = theme
-  }
+  constructor(public themeService: ThemeService) {}
 }

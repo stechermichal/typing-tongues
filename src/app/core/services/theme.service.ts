@@ -8,8 +8,10 @@ export class ThemeService {
   // Renderer for manipulating classes on the DOM elements
   private renderer: Renderer2
 
-  // BehaviorSubject to keep track of current theme, initializes with 'dark' as the default value
-  private readonly _theme = new BehaviorSubject<string>('dark')
+  // Initialize the theme from local storage or use 'dark' as default
+  private readonly _theme = new BehaviorSubject<string>(
+    localStorage.getItem('theme') || 'dark'
+  )
 
   // Observable to emit changes in theme for components to subscribe to
   readonly theme$ = this._theme.asObservable()
@@ -18,7 +20,7 @@ export class ThemeService {
     // Create an instance of Renderer
     this.renderer = rendererFactory.createRenderer(null, null)
 
-    // Add the dark theme to the body element by default when the service is created
+    // Add the theme to the body element when the service is created
     this.renderer.addClass(document.body, `theme-${this.theme}`)
   }
 
@@ -36,6 +38,9 @@ export class ThemeService {
 
     // Add the class of the new theme to body
     this.renderer.addClass(document.body, `theme-${val}`)
+
+    // Store the new theme in local storage
+    localStorage.setItem('theme', val)
 
     // Emit the new theme value through the BehaviorSubject
     this._theme.next(val)
