@@ -14,7 +14,8 @@
     <a href="/typing" class="mx-3 text-main-color hover:text-main-mute-color"
       >Typing</a
     >
-    <!-- theme select button -->
+    <!-- When the selected option changes, call the switchTheme method -->
+    <!-- Pass the selected theme value to the switchTheme method -->
     <select #themeSelect (change)="switchTheme(themeSelect.value)">
       <option value="dark">Dark</option>
       <option value="light">Light</option>
