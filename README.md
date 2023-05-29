@@ -1,27 +1,75 @@
-# TypingTongues
+# Typing Tongues Project
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0.
+## Table of Contents
 
-## Development server
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+  - [Adding a Custom Theme](#adding-a-custom-theme)
+- [License](#license)
+
+## Introduction
+
+Typing Tongues is an interactive web application to help users improve their typing skills while learning new languages. It's built using Angular for the frontend, styled with Tailwind CSS, and deployed on Vercel.
+
+## Features
+
+- Multilingual typing practice
+- Customizable themes
+- Real-time typing accuracy and speed feedback
+
+## Installation
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## Usage
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Instructions on how to use the project.
 
-## Build
+## Contributing
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Adding a Custom Theme
 
-## Running unit tests
+We have a unique way of handling themes, aiming to make it as simple as possible for contributors to add their own.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. Open `tailwind.config.js` file in the `root` directory.
 
-## Running end-to-end tests
+2. Add your theme in the format shown below:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+   ```javascript
+   yourThemeName: {
+        'bg-general': colors.red[500],
+        'bg-component': colors.blue[400],
+        'bg-button': colors.yellow[800],
+        'main-color': colors.green[600],
+        'main-mute-color': colors.teal[400],
+        'text-typed': colors.violet[400],
+        'text-to-type': colors.slate[700],
+        'text-error': colors.red[700],
+        'text-highlight': colors.pink[300],
+   },
+   ```
 
-## Further help
+Replace the colors with your chosen colors. We use the [Tailwind CSS color palette](https://tailwindcss.com/docs/customizing-colors). Make sure that `yourThemeName` is unique.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Add an item to the dropdown button of themes in `header.component.html` file in the `src/app/core/header` directory.
+
+```html
+<select #themeSelect (change)="switchTheme(themeSelect.value)">
+  <option value="alreadyExistingTheme">alreadyExistingTheme</option>
+  <option value="yourThemeName">yourThemeName</option>
+</select>
+```
+
+3. Create a pull request with your changes. Include a brief explanation of your theme and a screenshot showing how it looks.
+
+4. Once your pull request is accepted, your theme will be available for all users to enjoy!
+
+Please note that when creating a new theme, you should ensure it provides a good user experience and does not impair readability.
+You can use [Webaim Contrast Checker](https://webaim.org/resources/contrastchecker/) to get an idea of how compliant your theme is with accessibility standards.
+
+## License
+
+GPL-3.0 license
