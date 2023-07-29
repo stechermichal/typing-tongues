@@ -54,7 +54,15 @@ export class TypingAreaComponent implements OnInit {
   @HostListener('input', ['$event'])
   onUserType(event: Event) {
     const inputElement = event.target as HTMLInputElement
-    this.userTyping = inputElement.value
+    const latestInput = inputElement.value
+
+    // Check if the latest input character matches the current expected character
+    if (latestInput.charAt(latestInput.length - 1) !== this.currentChar) {
+      inputElement.value = this.typedText
+      return
+    }
+
+    this.userTyping = latestInput
 
     if (!this.startTime) {
       this.startTime = new Date().getTime()
