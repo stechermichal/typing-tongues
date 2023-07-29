@@ -7,5 +7,11 @@
       <span class="text-text-highlight">{{ currentChar }}</span>
       <span class="text-text-to-type">{{ remainingText }}</span>
     </p>
+    <textarea
+      #hiddenInput
+      class="absolute opacity-0"
+      [(ngModel)]="userTyping"
+      (input)="onUserType($event)"
+    ></textarea>
   </div>
 </div>
