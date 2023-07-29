@@ -4,7 +4,9 @@
   <div class="rounded bg-bg-component p-8 shadow-md">
     <p class="font-mono text-xl">
       <span class="text-text-typed">{{ typedText }}</span>
-      <span class="text-text-highlight">{{ currentChar }}</span>
+      <span class="text-text-highlight">{{
+        currentChar === ' ' ? '_' : currentChar
+      }}</span>
       <span class="text-text-to-type">{{ remainingText }}</span>
     </p>
     <textarea
