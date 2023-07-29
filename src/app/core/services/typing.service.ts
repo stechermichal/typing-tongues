@@ -13,7 +13,19 @@ export class TypingService {
 
   constructor() {}
 
-  updateStats(wpm: number, accuracy: number) {
+  updateStats(userTyping: string, textToType: string, startTime: number) {
+    const elapsedTime = new Date().getTime() - startTime
+    const wordsTyped = userTyping.split(' ').length
+    const wpm = (wordsTyped / elapsedTime) * 60000
+
+    let correctCharacters = 0
+    for (let i = 0; i < userTyping.length; i++) {
+      if (userTyping[i] === textToType[i]) {
+        correctCharacters++
+      }
+    }
+    const accuracy = (correctCharacters / textToType.length) * 100
+
     this.wpmSource.next(wpm)
     this.accuracySource.next(accuracy)
   }

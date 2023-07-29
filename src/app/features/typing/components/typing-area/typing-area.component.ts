@@ -19,8 +19,6 @@ export class TypingAreaComponent implements OnInit {
   @ViewChild('hiddenInput') hiddenInput!: ElementRef
   userTyping: string = ''
   startTime: number = 0
-  wordsPerMinute: number = 0
-  accuracy: number = 0
   textToType: string = 'The quick brown fox jumps over the lazy dog.'
   typedText = ''
   currentChar = this.textToType[0]
@@ -46,8 +44,6 @@ export class TypingAreaComponent implements OnInit {
   resetTyping() {
     this.userTyping = ''
     this.startTime = 0
-    this.wordsPerMinute = 0
-    this.accuracy = 0
     this.typedText = ''
     this.currentChar = this.textToType[0]
     this.remainingText = this.textToType.slice(1)
@@ -71,24 +67,13 @@ export class TypingAreaComponent implements OnInit {
     this.currentChar = this.textToType[this.typedText.length]
     this.remainingText = this.textToType.slice(this.typedText.length + 1)
 
-    this.calculateStats()
+    this.typingService.updateStats(
+      this.userTyping,
+      this.textToType,
+      this.startTime
+    )
 
     this.cd.detectChanges()
-  }
-
-  calculateStats() {
-    const elapsedTime = new Date().getTime() - this.startTime
-    const wordsTyped = this.userTyping.split(' ').length
-    this.wordsPerMinute = (wordsTyped / elapsedTime) * 60000
-    let correctCharacters = 0
-    for (let i = 0; i < this.userTyping.length; i++) {
-      if (this.userTyping[i] === this.textToType[i]) {
-        correctCharacters++
-      }
-    }
-    this.accuracy = (correctCharacters / this.textToType.length) * 100
-
-    this.typingService.updateStats(this.wordsPerMinute, this.accuracy)
   }
 
   @HostListener('click')
