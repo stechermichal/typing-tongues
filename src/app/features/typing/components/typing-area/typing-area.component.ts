@@ -53,15 +53,12 @@ export class TypingAreaComponent implements OnInit {
   // potentional unwanted behavior with different browsers/extensions that use base keys as shortcuts when outside of an input
   @HostListener('input', ['$event'])
   onUserType(event: Event) {
-    const inputEvent = event as InputEvent
-    this.userTyping = (inputEvent.target as HTMLInputElement).value
+    const inputElement = event.target as HTMLInputElement
+    this.userTyping = inputElement.value
 
     if (!this.startTime) {
       this.startTime = new Date().getTime()
     }
-
-    const inputElement = event.target as HTMLInputElement
-    this.userTyping = inputElement.value
 
     this.typedText = this.userTyping
     this.currentChar = this.textToType[this.typedText.length]
