@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
+import { MS_IN_A_MINUTE } from 'src/app/shared/constants'
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class TypingService {
   updateStats(userTyping: string, textToType: string, startTime: number) {
     const elapsedTime = new Date().getTime() - startTime
     const wordsTyped = userTyping.split(' ').length
-    const wpm = (wordsTyped / elapsedTime) * 60000
+    const wpm = ((wordsTyped / elapsedTime) * MS_IN_A_MINUTE).toFixed(2)
 
     let correctCharacters = 0
     for (let i = 0; i < userTyping.length; i++) {
@@ -24,9 +25,9 @@ export class TypingService {
         correctCharacters++
       }
     }
-    const accuracy = (correctCharacters / textToType.length) * 100
+    const accuracy = ((correctCharacters / textToType.length) * 100).toFixed(2)
 
-    this.wpmSource.next(wpm)
-    this.accuracySource.next(accuracy)
+    this.wpmSource.next(Number(wpm))
+    this.accuracySource.next(Number(accuracy))
   }
 }
