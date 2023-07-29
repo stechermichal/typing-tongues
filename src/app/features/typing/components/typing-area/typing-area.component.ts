@@ -39,6 +39,10 @@ export class TypingAreaComponent implements OnInit {
     this.resetTyping()
   }
 
+  ngAfterViewInit(): void {
+    this.hiddenInput.nativeElement.focus()
+  }
+
   resetTyping() {
     this.userTyping = ''
     this.startTime = 0
@@ -52,7 +56,10 @@ export class TypingAreaComponent implements OnInit {
   // Using keydown instead of a hidden input would be more straightforward, but this workaround of hiding the input should prevent
   // potentional unwanted behavior with different browsers/extensions that use base keys as shortcuts when outside of an input
   @HostListener('input', ['$event'])
-  onUserType(event: InputEvent | Event) {
+  onUserType(event: Event) {
+    const inputEvent = event as InputEvent
+    this.userTyping = (inputEvent.target as HTMLInputElement).value
+
     if (!this.startTime) {
       this.startTime = new Date().getTime()
     }
