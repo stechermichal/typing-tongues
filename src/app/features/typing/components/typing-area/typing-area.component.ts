@@ -4,12 +4,10 @@ import {
   Component,
   ElementRef,
   HostListener,
-  OnInit,
   ViewChild,
+  OnInit,
 } from '@angular/core'
-import { Observable } from 'rxjs'
 import { TypingService } from 'src/app/core/services/typing.service'
-import { ThemeService } from '../../../../core/services/theme.service'
 
 @Component({
   selector: 'app-typing-area',
@@ -20,23 +18,19 @@ import { ThemeService } from '../../../../core/services/theme.service'
 })
 export class TypingAreaComponent implements OnInit {
   @ViewChild('hiddenInput') hiddenInput!: ElementRef
-  mistakeText = '' // Newly added variable
+  mistakeText = ''
   userTyping: string = ''
   startTime: number = 0
   textToType: string = 'the quick brown fox jumps over the lazy dog.'
   typedText = ''
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
-  theme$: Observable<string>
   correctTyping: string = ''
 
   constructor(
     private typingService: TypingService,
-    private themeService: ThemeService,
     private cd: ChangeDetectorRef
-  ) {
-    this.theme$ = this.themeService.theme$
-  }
+  ) {}
 
   ngOnInit(): void {
     this.resetTyping()
