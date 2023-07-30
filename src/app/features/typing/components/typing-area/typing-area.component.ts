@@ -20,11 +20,13 @@ export class TypingAreaComponent implements OnInit {
   mistakeText = '' // Newly added variable
   userTyping: string = ''
   startTime: number = 0
-  textToType: string = 'The quick brown fox jumps over the lazy dog.'
+  textToType: string = 'the quick brown fox jumps over the lazy dog.'
   typedText = ''
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
   theme$: Observable<string>
+  errorText = ''
+  correctTyping: string = ''
 
   constructor(
     private typingService: TypingService,
@@ -46,9 +48,11 @@ export class TypingAreaComponent implements OnInit {
     this.userTyping = ''
     this.startTime = 0
     this.typedText = ''
-    this.mistakeText = '' // Reset mistakeText too
+    this.mistakeText = ''
     this.currentChar = this.textToType[0]
     this.remainingText = this.textToType.slice(1)
+    this.errorText = ''
+    this.correctTyping = ''
   }
 
   @HostListener('input', ['$event'])
@@ -57,22 +61,22 @@ export class TypingAreaComponent implements OnInit {
     const latestInput = inputElement.value
 
     if (latestInput.length > this.typedText.length) {
-      // Check if user typed a new character
       if (
         latestInput.charAt(latestInput.length - 1) !==
         this.textToType.charAt(latestInput.length - 1)
       ) {
-        this.mistakeText += latestInput.charAt(latestInput.length - 1) // Add the incorrect character
+        this.mistakeText += latestInput.charAt(latestInput.length - 1)
+        this.correctTyping += '0' // indicate an error has occurred
       } else {
-        this.mistakeText += '&nbsp;' // Add a non-breaking space if the character was correct
+        this.mistakeText += '&nbsp;'
+        this.correctTyping += '1' // indicate the character was typed correctly
       }
-      this.typedText += this.textToType.charAt(latestInput.length - 1) // Always add the next correct character to typedText
+      this.typedText += this.textToType.charAt(latestInput.length - 1)
     } else if (latestInput.length < this.typedText.length) {
-      // Check if user deleted a character
       this.mistakeText = this.mistakeText.slice(0, -1)
       this.typedText = this.typedText.slice(0, -1)
+      this.correctTyping = this.correctTyping.slice(0, -1)
     }
-
     if (!this.startTime) {
       this.startTime = new Date().getTime()
     }

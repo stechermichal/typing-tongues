@@ -3,19 +3,24 @@
 >
   <div class="rounded bg-bg-component p-8 shadow-md">
     <p class="font-mono text-xl">
-      <span class="text-text-typed">{{ typedText }}</span>
+      <ng-container *ngFor="let char of typedText.split(''); let i = index">
+        <span
+          [ngClass]="{
+            'text-text-error': correctTyping[i] === '0',
+            'text-text-typed': correctTyping[i] === '1'
+          }"
+          >{{ char }}</span
+        >
+      </ng-container>
       <span class="text-text-highlight">{{
         currentChar === ' ' ? '_' : currentChar
       }}</span>
       <span class="text-text-to-type">{{ remainingText }}</span>
     </p>
-    <!-- <p class="font-mono text-red-500">{{ mistakeText }}</p> -->
-    <!-- <p class="font-mono text-red-500" [innerHTML]="mistakeText"></p> -->
-    <!-- <p class="font-mono text-xl" [innerHTML]="mistakeText"></p> -->
     <p
       class="whitespace-pre-wrap font-mono text-xl"
       [innerHTML]="mistakeText"
-      [ngClass]="{ 'text-text-error': mistakeText.length > 0 }"
+      [ngClass]="{ 'text-text-typed': mistakeText.length > 0 }"
     ></p>
 
     <textarea
