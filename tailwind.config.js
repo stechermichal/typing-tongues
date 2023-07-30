@@ -22,7 +22,7 @@ module.exports = {
         'main-mute-color': colors.sky[300], // muted version of the color above
         'text-typed': colors.slate[50], // color of the text that has been typed
         'text-to-type': colors.slate[400], // color of the text that has to be typed
-        'text-error': colors.red[300], // mistakes
+        'text-error': colors.red[500], // mistakes
         'text-highlight': colors.yellow[300], // letter that is currently being typed
       },
       light: {
@@ -33,7 +33,7 @@ module.exports = {
         'main-mute-color': colors.sky[700],
         'text-typed': colors.slate[900],
         'text-to-type': colors.slate[700],
-        'text-error': colors.red[700],
+        'text-error': colors.red[500],
         'text-highlight': colors.yellow[700],
       },
       rainbowTest: {
@@ -44,7 +44,7 @@ module.exports = {
         'main-mute-color': colors.teal[400],
         'text-typed': colors.violet[400],
         'text-to-type': colors.slate[700],
-        'text-error': colors.red[700],
+        'text-error': colors.red[500],
         'text-highlight': colors.pink[300],
       },
     }),
