@@ -17,6 +17,7 @@ import { ThemeService } from '../../../../core/services/theme.service'
 })
 export class TypingAreaComponent implements OnInit {
   @ViewChild('hiddenInput') hiddenInput!: ElementRef
+  mistakeText = '' // Newly added variable
   userTyping: string = ''
   startTime: number = 0
   textToType: string = 'The quick brown fox jumps over the lazy dog.'
@@ -45,30 +46,37 @@ export class TypingAreaComponent implements OnInit {
     this.userTyping = ''
     this.startTime = 0
     this.typedText = ''
+    this.mistakeText = '' // Reset mistakeText too
     this.currentChar = this.textToType[0]
     this.remainingText = this.textToType.slice(1)
   }
 
-  // Using keydown instead of a hidden input would be more straightforward, but this workaround of hiding the input should prevent
-  // potentional unwanted behavior with different browsers/extensions that use base keys as shortcuts when outside of an input
   @HostListener('input', ['$event'])
   onUserType(event: Event) {
     const inputElement = event.target as HTMLInputElement
     const latestInput = inputElement.value
 
-    // Check if the latest input character matches the current expected character
-    if (latestInput.charAt(latestInput.length - 1) !== this.currentChar) {
-      inputElement.value = this.typedText
-      return
+    if (latestInput.length > this.typedText.length) {
+      // Check if user typed a new character
+      if (
+        latestInput.charAt(latestInput.length - 1) !==
+        this.textToType.charAt(latestInput.length - 1)
+      ) {
+        this.mistakeText += latestInput.charAt(latestInput.length - 1) // Add the incorrect character
+      } else {
+        this.mistakeText += '&nbsp;' // Add a non-breaking space if the character was correct
+      }
+      this.typedText += this.textToType.charAt(latestInput.length - 1) // Always add the next correct character to typedText
+    } else if (latestInput.length < this.typedText.length) {
+      // Check if user deleted a character
+      this.mistakeText = this.mistakeText.slice(0, -1)
+      this.typedText = this.typedText.slice(0, -1)
     }
-
-    this.userTyping = latestInput
 
     if (!this.startTime) {
       this.startTime = new Date().getTime()
     }
 
-    this.typedText = this.userTyping
     this.currentChar = this.textToType[this.typedText.length]
     this.remainingText = this.textToType.slice(this.typedText.length + 1)
 

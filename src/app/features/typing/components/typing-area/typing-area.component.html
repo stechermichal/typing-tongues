@@ -9,6 +9,15 @@
       }}</span>
       <span class="text-text-to-type">{{ remainingText }}</span>
     </p>
+    <!-- <p class="font-mono text-red-500">{{ mistakeText }}</p> -->
+    <!-- <p class="font-mono text-red-500" [innerHTML]="mistakeText"></p> -->
+    <!-- <p class="font-mono text-xl" [innerHTML]="mistakeText"></p> -->
+    <p
+      class="whitespace-pre-wrap font-mono text-xl"
+      [innerHTML]="mistakeText"
+      [ngClass]="{ 'text-text-error': mistakeText.length > 0 }"
+    ></p>
+
     <textarea
       #hiddenInput
       class="absolute opacity-0"
