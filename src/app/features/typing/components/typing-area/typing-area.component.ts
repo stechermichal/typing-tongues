@@ -47,7 +47,6 @@ export class TypingAreaComponent implements OnInit {
   resetTyping() {
     this.userTyping = ''
     this.startTime = 0
-    this.typedText = ''
     this.mistakeText = ''
     this.currentChar = this.textToType[0]
     this.remainingText = this.textToType.slice(1)
@@ -58,25 +57,23 @@ export class TypingAreaComponent implements OnInit {
   @HostListener('input', ['$event'])
   onUserType(event: Event) {
     const inputElement = event.target as HTMLInputElement
-    const latestInput = inputElement.value
+    this.userTyping = inputElement.value
 
-    if (latestInput.length > this.typedText.length) {
-      if (
-        latestInput.charAt(latestInput.length - 1) !==
-        this.textToType.charAt(latestInput.length - 1)
-      ) {
-        this.mistakeText += latestInput.charAt(latestInput.length - 1)
-        this.correctTyping += '0' // indicate an error has occurred
+    this.correctTyping = ''
+    this.mistakeText = ''
+
+    for (let i = 0; i < this.userTyping.length; i++) {
+      if (this.userTyping[i] !== this.textToType[i]) {
+        this.correctTyping += '0' // Indicate an error has occurred
+        this.mistakeText += this.userTyping[i]
       } else {
+        this.correctTyping += '1' // Indicate the character was typed correctly
         this.mistakeText += '&nbsp;'
-        this.correctTyping += '1' // indicate the character was typed correctly
       }
-      this.typedText += this.textToType.charAt(latestInput.length - 1)
-    } else if (latestInput.length < this.typedText.length) {
-      this.mistakeText = this.mistakeText.slice(0, -1)
-      this.typedText = this.typedText.slice(0, -1)
-      this.correctTyping = this.correctTyping.slice(0, -1)
     }
+
+    this.typedText = this.textToType.slice(0, this.userTyping.length)
+
     if (!this.startTime) {
       this.startTime = new Date().getTime()
     }
