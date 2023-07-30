@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -14,6 +15,8 @@ import { ThemeService } from '../../../../core/services/theme.service'
   selector: 'app-typing-area',
   templateUrl: './typing-area.component.html',
   styleUrls: ['./typing-area.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush, // This is more efficient with how often we update here, but has extra requirements
+  // with @Input and child components. If there is an issue with updating something, this might be the culprit.
 })
 export class TypingAreaComponent implements OnInit {
   @ViewChild('hiddenInput') hiddenInput!: ElementRef
