@@ -12,6 +12,10 @@
           >{{ char }}</span
         >
       </ng-container>
+      <span
+        class="inline-block h-[1em] w-[0.1px] animate-blink bg-current bg-text-typed"
+        *ngIf="currentChar"
+      ></span>
       <span class="text-text-highlight">{{
         currentChar === ' ' ? '_' : currentChar
       }}</span>
