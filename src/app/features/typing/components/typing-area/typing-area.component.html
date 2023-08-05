@@ -2,7 +2,7 @@
   class="flex min-h-screen flex-col items-center justify-center bg-bg-general py-6"
 >
   <div class="rounded bg-bg-component p-8 shadow-md">
-    <p class="font-mono text-xl">
+    <p class="relative font-mono text-xl">
       <!-- Iterate over each character of the typed text -->
       <ng-container *ngFor="let char of typedText.split(''); let i = index">
         <span
@@ -13,10 +13,10 @@
           >{{ char }}</span
         >
       </ng-container>
-      <!-- Animated blinking caret to indicate current typing position -->
+      <!-- Caret is absolute to not affect the text with its presence, parent is relative because of that -->
       <span
-        class="relative inline-block h-[1.25em] w-[0.1px] animate-blink bg-text-highlight"
-        style="bottom: -0.25em"
+        class="absolute inline-block h-[1.25em] w-[0.1px] animate-blink bg-text-highlight"
+        style="bottom: 0.15em"
       ></span>
       <!-- The current character to type (spaces are represented by underscores) -->
       <span class="text-text-highlight">{{
@@ -26,7 +26,7 @@
     </p>
     <!--  Area for typing mistakes -->
     <p
-      class="whitespace-pre-wrap font-mono text-xl"
+      class="h-[1.5em] whitespace-pre-wrap font-mono text-xl"
       [innerHTML]="mistakeText"
       [ngClass]="{ 'text-main-mute-color': mistakeText.length > 0 }"
     ></p>
