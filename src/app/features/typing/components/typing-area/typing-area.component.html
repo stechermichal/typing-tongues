@@ -3,6 +3,7 @@
 >
   <div class="rounded bg-bg-component p-8 shadow-md">
     <p class="font-mono text-xl">
+      <!-- Iterate over each character of the typed text -->
       <ng-container *ngFor="let char of typedText.split(''); let i = index">
         <span
           [ngClass]="{
@@ -12,21 +13,28 @@
           >{{ char }}</span
         >
       </ng-container>
+      <!-- Animated blinking caret to indicate current typing position -->
       <span
-        class="inline-block h-[1em] w-[0.1px] animate-blink bg-current bg-text-typed"
-        *ngIf="currentChar"
+        class="relative inline-block h-[1.25em] w-[0.1px] animate-blink"
+        [ngClass]="{
+          'bg-text-highlight': currentChar,
+          'bg-transparent': !currentChar
+        }"
+        style="bottom: -0.25em"
       ></span>
+      <!-- The current character to type (spaces are represented by underscores) -->
       <span class="text-text-highlight">{{
         currentChar === ' ' ? '_' : currentChar
       }}</span>
       <span class="text-text-to-type">{{ remainingText }}</span>
     </p>
+    <!--  Area for typing mistakes -->
     <p
       class="whitespace-pre-wrap font-mono text-xl"
       [innerHTML]="mistakeText"
       [ngClass]="{ 'text-main-mute-color': mistakeText.length > 0 }"
     ></p>
-
+    <!-- Invisible input area for capturing user typing. Its updates trigger the typing mechanism. -->
     <textarea
       #hiddenInput
       class="absolute opacity-0"
