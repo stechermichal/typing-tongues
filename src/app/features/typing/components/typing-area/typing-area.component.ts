@@ -27,6 +27,7 @@ export class TypingAreaComponent implements OnInit {
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
   correctTyping: string = ''
+  typingStatusEnum = TypingStatus // Expose the enum to the template
 
   constructor(
     private typingService: TypingService,
