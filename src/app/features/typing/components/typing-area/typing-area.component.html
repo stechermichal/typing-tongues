@@ -15,11 +15,7 @@
       </ng-container>
       <!-- Animated blinking caret to indicate current typing position -->
       <span
-        class="relative inline-block h-[1.25em] w-[0.1px] animate-blink"
-        [ngClass]="{
-          'bg-text-highlight': currentChar,
-          'bg-transparent': !currentChar
-        }"
+        class="relative inline-block h-[1.25em] w-[0.1px] animate-blink bg-text-highlight"
         style="bottom: -0.25em"
       ></span>
       <!-- The current character to type (spaces are represented by underscores) -->
