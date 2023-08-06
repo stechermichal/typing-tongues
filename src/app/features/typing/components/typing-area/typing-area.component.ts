@@ -30,8 +30,8 @@ export class TypingAreaComponent implements OnInit {
   mistakeText = ''
   userTyping: string = ''
   startTime: number = 0
-  textToType: string = 'always always always always always'
-  typedText = ''
+  textToType: string = 'the quick brown fox jumps over the lazy dog.'
+  typedText: string = ''
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
   correctTyping: string = ''
