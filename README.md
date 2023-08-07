@@ -73,3 +73,7 @@ You can use [Webaim Contrast Checker](https://webaim.org/resources/contrastcheck
 ## License
 
 GPL-3.0 license
+
+## How stats work
+
+Todo

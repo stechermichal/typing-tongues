@@ -3,8 +3,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
+  Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core'
 import { TypingService } from 'src/app/core/services/typing.service'
@@ -19,15 +22,21 @@ import { TypingStatus } from 'src/app/shared/enums'
 })
 export class TypingAreaComponent implements OnInit {
   @ViewChild('hiddenInput') hiddenInput!: ElementRef
+  @Output() focus = new EventEmitter<void>()
+  @Output() blur = new EventEmitter<void>()
+  @Input() autoFocus = true
+  @Input() language: 'english' | 'german' = 'english'
+
   mistakeText = ''
   userTyping: string = ''
   startTime: number = 0
   textToType: string = 'the quick brown fox jumps over the lazy dog.'
-  typedText = ''
+  typedText: string = ''
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
   correctTyping: string = ''
   typingStatusEnum = TypingStatus // Expose the enum to the template
+  isFocused = false
 
   constructor(
     private typingService: TypingService,
@@ -39,7 +48,9 @@ export class TypingAreaComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.hiddenInput.nativeElement.focus()
+    if (this.autoFocus) {
+      this.hiddenInput.nativeElement.focus()
+    }
   }
 
   resetTyping() {
@@ -94,7 +105,8 @@ export class TypingAreaComponent implements OnInit {
     this.typingService.updateStats(
       this.userTyping,
       this.textToType,
-      this.startTime
+      this.startTime,
+      this.language
     )
 
     this.cd.detectChanges()
@@ -103,5 +115,17 @@ export class TypingAreaComponent implements OnInit {
   @HostListener('click')
   onClick() {
     this.hiddenInput.nativeElement.focus()
+  }
+
+  onFocus() {
+    this.isFocused = true
+
+    this.focus.emit()
+  }
+
+  onBlur() {
+    this.isFocused = false
+
+    this.blur.emit()
   }
 }
