@@ -1,2 +1,38 @@
-<app-typing-stats></app-typing-stats>
-<app-typing-area></app-typing-area>
+<div class="relative flex min-h-screen bg-bg-general">
+  <!-- FIXME: the border visibly shifts when changing focus of windows -->
+  <!-- This div will act as the border -->
+  <div
+    class="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 transform bg-gray-400"
+  ></div>
+
+  <!-- English Content -->
+  <div
+    class="relative w-1/2"
+    [class.bg-black]="!isEnglishFocused && isEnglishFocused !== null"
+    [class.opacity-30]="!isEnglishFocused && isEnglishFocused !== null"
+    [class.opacity-100]="isEnglishFocused || isEnglishFocused === null"
+  >
+    <app-typing-stats [language]="Language.English"></app-typing-stats>
+    <app-typing-area
+      (focus)="setFocus(Language.English)"
+      [language]="Language.English"
+    >
+    </app-typing-area>
+  </div>
+
+  <!-- German Content -->
+  <div
+    class="relative w-1/2"
+    [class.bg-black]="isEnglishFocused && isEnglishFocused !== null"
+    [class.opacity-30]="isEnglishFocused && isEnglishFocused !== null"
+    [class.opacity-100]="!isEnglishFocused || isEnglishFocused === null"
+  >
+    <app-typing-stats [language]="Language.German"></app-typing-stats>
+    <app-typing-area
+      (focus)="setFocus(Language.German)"
+      [language]="Language.German"
+      [autoFocus]="false"
+    >
+    </app-typing-area>
+  </div>
+</div>
