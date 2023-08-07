@@ -2,49 +2,94 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { MS_IN_A_MINUTE } from 'src/app/shared/constants'
 
+interface TypingStats {
+  wpm: BehaviorSubject<number>
+  accuracy: BehaviorSubject<number>
+  totalKeyPresses: number
+  mistakesMade: number
+  previousTypedLength: number // Keep track of previously typed length
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class TypingService {
-  private wpmSource = new BehaviorSubject<number>(0)
-  private accuracySource = new BehaviorSubject<number>(0)
-
-  currentWpm: Observable<number> = this.wpmSource.asObservable()
-  currentAccuracy: Observable<number> = this.accuracySource.asObservable()
+  // Initial stats for both English and German languages.
+  private stats: Record<string, TypingStats> = {
+    english: {
+      wpm: new BehaviorSubject<number>(0),
+      accuracy: new BehaviorSubject<number>(0),
+      totalKeyPresses: 0,
+      mistakesMade: 0,
+      previousTypedLength: 0,
+    },
+    german: {
+      wpm: new BehaviorSubject<number>(0),
+      accuracy: new BehaviorSubject<number>(0),
+      totalKeyPresses: 0,
+      mistakesMade: 0,
+      previousTypedLength: 0,
+    },
+  }
 
   constructor() {}
 
-  // Add a new property to keep track of total keypresses
-  private totalKeyPresses = 0
-  private mistakesMade = 0
-  private maxTypedLength = 0
+  // Get Observable for WPM for a given language.
+  getWpmObservable(language: string): Observable<number> {
+    return this.stats[language].wpm.asObservable()
+  }
 
-  updateStats(userTyping: string, textToType: string, startTime: number) {
-    const elapsedTime = new Date().getTime() - startTime
-    const wordsTyped = userTyping.split(' ').length
-    const wpm = ((wordsTyped / elapsedTime) * MS_IN_A_MINUTE).toFixed(2)
+  // Get Observable for accuracy for a given language.
+  getAccuracyObservable(language: string): Observable<number> {
+    return this.stats[language].accuracy.asObservable()
+  }
 
-    let correctCharacters = 0
+  // Update the typing statistics based on user input, expected text, start time, and language.
+  updateStats(
+    userTyping: string,
+    textToType: string,
+    startTime: number,
+    language: string
+  ) {
+    const stats = this.stats[language]
 
-    for (let i = 0; i < userTyping.length; i++) {
-      if (userTyping[i] === textToType[i]) {
-        correctCharacters++
-      } else if (i === this.totalKeyPresses) {
-        // We only count mistakes on new keypresses to avoid overcounting
-        this.mistakesMade++
+    // If the length of user input has decreased, they've used backspace.
+    if (userTyping.length < stats.previousTypedLength) {
+      // Calculate number of characters removed.
+      const charsRemoved = stats.previousTypedLength - userTyping.length
+
+      // Subtract those characters from the total key presses.
+      stats.totalKeyPresses -= charsRemoved
+    } else {
+      // Compare the user's new input against the original text.
+      for (let i = stats.previousTypedLength; i < userTyping.length; i++) {
+        // Increment total keypress count.
+        stats.totalKeyPresses++
+
+        // Check for mistakes.
+        if (i >= textToType.length || userTyping[i] !== textToType[i]) {
+          stats.mistakesMade++
+        }
       }
     }
 
-    // Increase the total keypresses after checking for mistakes
-    this.totalKeyPresses = userTyping.length
+    // Update previousTypedLength
+    stats.previousTypedLength = userTyping.length
 
-    // The accuracy now considers mistakes made against total keypresses
-    const accuracy = (
-      (100 * (this.totalKeyPresses - this.mistakesMade)) /
-      this.totalKeyPresses
-    ).toFixed(2)
+    // Calculate the time elapsed since the user started typing, in minutes.
+    const elapsedTimeInMinutes =
+      (new Date().getTime() - startTime) / MS_IN_A_MINUTE
 
-    this.wpmSource.next(Number(wpm))
-    this.accuracySource.next(Number(accuracy))
+    // Calculate WPM.
+    const wpm = userTyping.split(' ').length / elapsedTimeInMinutes
+
+    // Calculate accuracy considering mistakes made against total keypresses.
+    const accuracy =
+      (100 * (stats.totalKeyPresses - stats.mistakesMade)) /
+      stats.totalKeyPresses
+
+    // Update the BehaviorSubjects for WPM and accuracy with the newly calculated values.
+    stats.wpm.next(Number(wpm.toFixed(2)))
+    stats.accuracy.next(Number(accuracy.toFixed(2)))
   }
 }
