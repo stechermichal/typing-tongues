@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -6,8 +7,10 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core'
 import { TypingService } from 'src/app/core/services/typing.service'
@@ -20,7 +23,7 @@ import { TypingStatus } from 'src/app/shared/enums'
   changeDetection: ChangeDetectionStrategy.OnPush, // This is more efficient with how often we update here, but has extra requirements
   // with @Input and child components.sIf there is an issue with updating something, this might be the culprit.
 })
-export class TypingAreaComponent implements OnInit {
+export class TypingAreaComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild('hiddenInput') hiddenInput!: ElementRef
   @Output() focus = new EventEmitter<void>()
   @Output() blur = new EventEmitter<void>()
@@ -31,7 +34,11 @@ export class TypingAreaComponent implements OnInit {
   mistakeText = ''
   userTyping: string = ''
   startTime: number = 0
-  textToType: string = 'the quick brown fox jumps over the lazy dog.'
+  textsToType: Record<'nativeTongue' | 'foreignTongue', string> = {
+    nativeTongue: 'the quick brown fox jumps over the lazy dog',
+    foreignTongue: 'translated text here',
+  }
+  textToType: string = this.textsToType[this.language]
   typedText: string = ''
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
@@ -61,6 +68,13 @@ export class TypingAreaComponent implements OnInit {
     this.currentChar = this.textToType[0]
     this.remainingText = this.textToType.slice(1)
     this.correctTyping = ''
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['language'] && changes['language'].currentValue) {
+      this.textToType = this.textsToType[this.language]
+      this.resetTyping()
+    }
   }
 
   // Event handler for user typing. This is triggered every time the user types something.
