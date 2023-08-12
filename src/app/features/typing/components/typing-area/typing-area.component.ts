@@ -24,6 +24,7 @@ export class TypingAreaComponent implements OnInit {
   @ViewChild('hiddenInput') hiddenInput!: ElementRef
   @Output() focus = new EventEmitter<void>()
   @Output() blur = new EventEmitter<void>()
+  @Output() typingCompleted = new EventEmitter<void>()
   @Input() autoFocus = true
   @Input() language: 'nativeTongue' | 'foreignTongue' = 'nativeTongue'
 
@@ -101,6 +102,11 @@ export class TypingAreaComponent implements OnInit {
 
     this.currentChar = this.textToType[this.typedText.length]
     this.remainingText = this.textToType.slice(this.typedText.length + 1)
+
+    // for switching focus to other window when finished typing in the first window
+    if (this.userTyping === this.textToType) {
+      this.typingCompleted.emit()
+    }
 
     this.typingService.updateStats(
       this.userTyping,

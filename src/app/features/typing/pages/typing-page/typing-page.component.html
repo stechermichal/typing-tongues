@@ -20,6 +20,8 @@
     <app-typing-area
       (focus)="setFocus(Language.NativeTongue)"
       [language]="Language.NativeTongue"
+      (typingCompleted)="switchFocusToForeignTongue()"
+      #nativeTongueTypingArea
     >
     </app-typing-area>
   </div>
@@ -38,6 +40,7 @@
       (focus)="setFocus(Language.ForeignTongue)"
       [language]="Language.ForeignTongue"
       [autoFocus]="false"
+      #foreignTongueTypingArea
     >
     </app-typing-area>
   </div>
