@@ -25,7 +25,7 @@ export class TypingAreaComponent implements OnInit {
   @Output() focus = new EventEmitter<void>()
   @Output() blur = new EventEmitter<void>()
   @Input() autoFocus = true
-  @Input() language: 'english' | 'german' = 'english'
+  @Input() language: 'nativeTongue' | 'foreignTongue' = 'nativeTongue'
 
   mistakeText = ''
   userTyping: string = ''

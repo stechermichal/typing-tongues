@@ -5,32 +5,38 @@
     class="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 transform bg-gray-400"
   ></div>
 
-  <!-- English Content -->
+  <!-- nativeTongue Content -->
   <div
     class="relative w-1/2"
-    [class.bg-black]="!isEnglishFocused && isEnglishFocused !== null"
-    [class.opacity-30]="!isEnglishFocused && isEnglishFocused !== null"
-    [class.opacity-100]="isEnglishFocused || isEnglishFocused === null"
+    [class.bg-black]="!isNativeTongueFocused && isNativeTongueFocused !== null"
+    [class.opacity-30]="
+      !isNativeTongueFocused && isNativeTongueFocused !== null
+    "
+    [class.opacity-100]="
+      isNativeTongueFocused || isNativeTongueFocused === null
+    "
   >
-    <app-typing-stats [language]="Language.English"></app-typing-stats>
+    <app-typing-stats [language]="Language.NativeTongue"></app-typing-stats>
     <app-typing-area
-      (focus)="setFocus(Language.English)"
-      [language]="Language.English"
+      (focus)="setFocus(Language.NativeTongue)"
+      [language]="Language.NativeTongue"
     >
     </app-typing-area>
   </div>
 
-  <!-- German Content -->
+  <!-- foreignTongue Content -->
   <div
     class="relative w-1/2"
-    [class.bg-black]="isEnglishFocused && isEnglishFocused !== null"
-    [class.opacity-30]="isEnglishFocused && isEnglishFocused !== null"
-    [class.opacity-100]="!isEnglishFocused || isEnglishFocused === null"
+    [class.bg-black]="isNativeTongueFocused && isNativeTongueFocused !== null"
+    [class.opacity-30]="isNativeTongueFocused && isNativeTongueFocused !== null"
+    [class.opacity-100]="
+      !isNativeTongueFocused || isNativeTongueFocused === null
+    "
   >
-    <app-typing-stats [language]="Language.German"></app-typing-stats>
+    <app-typing-stats [language]="Language.ForeignTongue"></app-typing-stats>
     <app-typing-area
-      (focus)="setFocus(Language.German)"
-      [language]="Language.German"
+      (focus)="setFocus(Language.ForeignTongue)"
+      [language]="Language.ForeignTongue"
       [autoFocus]="false"
     >
     </app-typing-area>

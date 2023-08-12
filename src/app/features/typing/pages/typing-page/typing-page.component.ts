@@ -8,9 +8,9 @@ import { Language } from 'src/app/shared/enums'
 })
 export class TypingPageComponent {
   Language = Language // To use it in the template
-  isEnglishFocused: boolean | null = null
+  isNativeTongueFocused: boolean | null = null
 
   setFocus(language: Language) {
-    this.isEnglishFocused = language === Language.English
+    this.isNativeTongueFocused = language === Language.NativeTongue
   }
 }

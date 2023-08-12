@@ -7,7 +7,7 @@ export class LanguageService {
   private languages: {
     [key: string]: { original: string; translation: string }[]
   } = {
-    english: [
+    nativeTongue: [
       {
         original: 'The quick brown fox jumps over the lazy dog',
         translation: 'Der schnelle braune Fuchs springt über den faulen Hund',
@@ -17,7 +17,7 @@ export class LanguageService {
         translation: 'Packe meine Kiste mit fünf Dutzend Schnapsflaschen',
       },
     ],
-    german: [
+    foreignTongue: [
       {
         original: 'Franz jagt im komplett verwahrlosten Taxi quer durch Bayern',
         translation:

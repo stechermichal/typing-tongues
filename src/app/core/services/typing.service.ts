@@ -14,16 +14,16 @@ interface TypingStats {
   providedIn: 'root',
 })
 export class TypingService {
-  // Initial stats for both English and German languages.
+  // Initial stats for both nativeTongue and foreignTongue languages.
   private stats: Record<string, TypingStats> = {
-    english: {
+    nativeTongue: {
       wpm: new BehaviorSubject<number>(0),
       accuracy: new BehaviorSubject<number>(0),
       totalKeyPresses: 0,
       mistakesMade: 0,
       previousTypedLength: 0,
     },
-    german: {
+    foreignTongue: {
       wpm: new BehaviorSubject<number>(0),
       accuracy: new BehaviorSubject<number>(0),
       totalKeyPresses: 0,
