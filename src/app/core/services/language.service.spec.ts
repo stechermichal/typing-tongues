@@ -16,11 +16,11 @@ describe('LanguageService', () => {
 
   it('should return the correct languages', () => {
     const languages = service.getLanguages()
-    expect(languages).toEqual(['english', 'german'])
+    expect(languages).toEqual(['nativeTongue', 'foreignTongue'])
   })
 
-  it('should return the correct data for english', () => {
-    const data = service.getLanguageData('english')
+  it('should return the correct data for nativeTongue', () => {
+    const data = service.getLanguageData('nativeTongue')
     expect(data).toEqual([
       {
         original: 'The quick brown fox jumps over the lazy dog',

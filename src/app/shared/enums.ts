@@ -4,6 +4,6 @@ export enum TypingStatus {
 }
 
 export enum Language {
-  English = 'english',
-  German = 'german',
+  NativeTongue = 'nativeTongue',
+  ForeignTongue = 'foreignTongue',
 }

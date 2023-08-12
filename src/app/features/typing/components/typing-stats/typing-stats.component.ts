@@ -8,7 +8,7 @@ import { Subscription, combineLatest } from 'rxjs' // Imported Subscription and 
   styleUrls: ['./typing-stats.component.css'],
 })
 export class TypingStatsComponent implements OnInit, OnDestroy {
-  @Input() language: 'english' | 'german' = 'english'
+  @Input() language: 'nativeTongue' | 'foreignTongue' = 'nativeTongue'
 
   wordsPerMinute!: number
   accuracy!: number
