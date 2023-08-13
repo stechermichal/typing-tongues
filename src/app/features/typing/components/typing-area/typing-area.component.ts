@@ -13,8 +13,9 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core'
+import { BookService } from 'src/app/core/services/book.service'
 import { TypingService } from 'src/app/core/services/typing.service'
-import { TypingStatus } from 'src/app/shared/enums'
+import { Language, TypingStatus } from 'src/app/shared/enums'
 
 @Component({
   selector: 'app-typing-area',
@@ -48,11 +49,36 @@ export class TypingAreaComponent implements OnInit, OnChanges, AfterViewInit {
 
   constructor(
     private typingService: TypingService,
+    private bookService: BookService,
     private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    this.fetchTexts()
     this.resetTyping()
+  }
+
+  fetchTexts(): void {
+    // Define the maximum length of displayed text
+    const maxLength = 1000
+
+    // Fetch English Text
+    this.bookService.getEnglishBook().subscribe((englishText) => {
+      this.textsToType.nativeTongue = englishText.slice(0, maxLength) // slice the text
+      if (this.language === Language.NativeTongue) {
+        this.textToType = this.textsToType.nativeTongue
+        this.resetTyping()
+      }
+    })
+
+    // Fetch German Text
+    this.bookService.getGermanBook().subscribe((germanText) => {
+      this.textsToType.foreignTongue = germanText.slice(0, maxLength) // slice the text
+      if (this.language === Language.ForeignTongue) {
+        this.textToType = this.textsToType.foreignTongue
+        this.resetTyping()
+      }
+    })
   }
 
   ngAfterViewInit(): void {
