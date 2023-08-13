@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core'
 import { Language } from 'src/app/shared/enums'
 import { TypingAreaComponent } from '../../components/typing-area/typing-area.component'
 
@@ -14,8 +14,12 @@ export class TypingPageComponent {
   Language = Language // To use it in the template
   isNativeTongueFocused: boolean | null = null
 
+  constructor(private cd: ChangeDetectorRef) {}
+
   setFocus(language: Language) {
     this.isNativeTongueFocused = language === Language.NativeTongue
+    // avoid expression changed error
+    this.cd.detectChanges()
   }
 
   switchFocusToForeignTongue() {
