@@ -4,3 +4,7 @@
   align-items: center;
   white-space: pre;
 }
+.tighter-leading {
+  margin-bottom: -0.2em; /* Adjust the value as needed */
+  margin-top: -0.2em; /* Adjust the value as needed */
+}
