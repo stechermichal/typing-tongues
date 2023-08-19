@@ -2,17 +2,25 @@
   class="flex min-h-screen flex-col items-center justify-center bg-bg-general py-6"
 >
   <div class="rounded bg-bg-component p-8 shadow-md">
-    <p class="relative font-mono text-xl">
-      <span class="text-text-typed">{{ typedText }}</span>
-      <span class="text-text-highlight">{{
-        currentChar === ' ' ? '_' : currentChar
-      }}</span>
-      <span class="text-text-to-type">{{ remainingText }}</span>
-    </p>
-    <p
-      class="h-[1.5em] whitespace-pre-wrap font-mono text-xl text-main-mute-color"
-      [innerHTML]="mistakeText"
-    ></p>
+    <div class="flex flex-wrap font-mono text-xl">
+      <ng-container *ngFor="let char of textToType.split(''); let i = index">
+        <div class="character-wrapper">
+          <span *ngIf="i < typedText.length" class="text-text-typed">{{
+            char
+          }}</span>
+          <span *ngIf="i === typedText.length" class="text-text-highlight">{{
+            char === ' ' ? '_' : char
+          }}</span>
+          <span *ngIf="i > typedText.length" class="text-text-to-type">{{
+            char
+          }}</span>
+          <div
+            [innerHTML]="mistakeText[i] || '&nbsp;'"
+            [ngClass]="mistakeText[i] ? 'text-main-mute-color' : ''"
+          ></div>
+        </div>
+      </ng-container>
+    </div>
     <textarea
       #hiddenInput
       class="absolute opacity-0"

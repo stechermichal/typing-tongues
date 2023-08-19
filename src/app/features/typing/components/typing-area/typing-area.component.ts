@@ -36,7 +36,7 @@ export class TypingAreaComponent implements OnInit, AfterViewInit {
   }
   @Input() autoFocus = true
 
-  mistakeText = ''
+  mistakeText: string[] = []
   userTyping: string = ''
   startTime: number = 0
   textsToType = {
@@ -65,7 +65,7 @@ export class TypingAreaComponent implements OnInit, AfterViewInit {
   resetTyping() {
     this.userTyping = ''
     this.startTime = 0
-    this.mistakeText = ''
+    // this.mistakeText =
     this.textToType = this.textsToType[this.language]
     this.typedText = ''
     this.currentChar = this.textToType[0]
@@ -73,13 +73,11 @@ export class TypingAreaComponent implements OnInit, AfterViewInit {
   }
 
   onUserType() {
-    this.mistakeText = ''
+    this.mistakeText = Array(this.textToType.length).fill('&nbsp;')
 
     for (let i = 0; i < this.userTyping.length; i++) {
       if (this.userTyping[i] !== this.textToType[i]) {
-        this.mistakeText += this.userTyping[i]
-      } else {
-        this.mistakeText += '&nbsp;'
+        this.mistakeText[i] = this.userTyping[i]
       }
     }
 
