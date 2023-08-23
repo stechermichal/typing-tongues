@@ -2,7 +2,7 @@
   class="flex min-h-screen flex-col items-center justify-center bg-bg-general px-5 py-32"
 >
   <div class="rounded bg-bg-component p-8 shadow-md">
-    <div class="flex flex-wrap font-mono text-xl">
+    <div class="relative flex flex-wrap font-mono text-xl">
       <ng-container *ngFor="let char of textToType.split(''); let i = index">
         <div class="character-wrapper leading-none">
           <!-- Display correctly typed characters or show expected character in error color if a typo is made -->
@@ -15,6 +15,12 @@
             "
             >{{ char }}</span
           >
+
+          <!-- Display the caret before the next expected character -->
+          <span
+            *ngIf="i === typedText.length"
+            class="absolute mb-1 mr-3 inline-block h-[1.25em] w-[0.1px] animate-blink bg-text-highlight"
+          ></span>
 
           <!-- Display the next expected character -->
           <span *ngIf="i === typedText.length" class="text-text-highlight">{{
@@ -36,7 +42,7 @@
     </div>
     <textarea
       #hiddenInput
-      class="absolute opacity-0"
+      class="hidden-input"
       [(ngModel)]="userTyping"
       (input)="onUserType()"
       (focus)="onFocus()"

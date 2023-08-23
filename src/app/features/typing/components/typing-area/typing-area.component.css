@@ -5,6 +5,43 @@
   white-space: pre;
 }
 .tighter-leading {
-  margin-bottom: -0.2em; /* Adjust the value as needed */
-  margin-top: -0.2em; /* Adjust the value as needed */
+  margin-bottom: -0.2em;
+  margin-top: -0.2em;
+}
+.hidden-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: -1;
+}
+/* .caret {
+  display: inline-block;
+  width: 0.1px;
+  height: 1.25em;
+  background-color: var(--highlight-color, #fff);
+  animation: blink 1s infinite;
+} */
+.caret {
+  margin-right: 0.6em;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.next-char::after {
+  content: '';
+  display: inline-block;
+  width: 0.1px;
+  height: 1.25em;
+  background-color: var(--highlight-color, #fff);
+  animation: blink 1s infinite;
+  vertical-align: bottom;
 }
