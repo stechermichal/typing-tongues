@@ -15,16 +15,6 @@
   opacity: 0;
   z-index: -1;
 }
-/* .caret {
-  display: inline-block;
-  width: 0.1px;
-  height: 1.25em;
-  background-color: var(--highlight-color, #fff);
-  animation: blink 1s infinite;
-} */
-.caret {
-  margin-right: 0.6em;
-}
 
 @keyframes blink {
   0%,
