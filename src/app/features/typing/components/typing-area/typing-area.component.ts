@@ -7,10 +7,13 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core'
+
 import { BookService } from 'src/app/core/services/book.service'
 import { TypingService } from 'src/app/core/services/typing.service'
 import { Language } from 'src/app/shared/enums'
@@ -22,7 +25,7 @@ import { Language } from 'src/app/shared/enums'
   changeDetection: ChangeDetectionStrategy.OnPush, // This is more efficient with how often we update here, but has extra requirements
   // with @Input and child components.sIf there is an issue with updating something, this might be the culprit.
 })
-export class TypingAreaComponent implements OnInit, AfterViewInit {
+export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('hiddenInput') hiddenInput!: ElementRef
   @Output() focus = new EventEmitter<void>()
   @Output() blur = new EventEmitter<void>()
@@ -32,7 +35,7 @@ export class TypingAreaComponent implements OnInit, AfterViewInit {
   @Input()
   set language(val: 'nativeTongue' | 'foreignTongue') {
     this._language = val
-    this.resetTyping()
+    // this.resetTyping()
   }
   get language(): 'nativeTongue' | 'foreignTongue' {
     return this._language
@@ -44,14 +47,14 @@ export class TypingAreaComponent implements OnInit, AfterViewInit {
   startTime: number = 0
   textsToType = {
     nativeTongue: '',
-    foreignTongue: 'test',
+    foreignTongue: '',
   }
   textToType: string = this.textsToType[this.language]
   typedText: string = ''
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
   isFocused = false
-  pages: string[] = []
+  @Input() pages: string[] = []
 
   constructor(
     private typingService: TypingService,
@@ -60,18 +63,16 @@ export class TypingAreaComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.bookService.getEnglishBook().subscribe(
-      (pages) => {
-        this.pages = pages
-        this.textsToType.nativeTongue = this.pages[5]
-        this.mistakeText = Array(this.textToType.length).fill('&nbsp;')
-        this.resetTyping()
-        this.changeDetectorRef.detectChanges()
-      },
-      (error) => {
-        console.error('Failed to fetch book', error)
-      }
-    )
+    // this.fetchTexts()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ('pages' in changes) {
+      this.textsToType.nativeTongue = this.pages[100]
+      this.textsToType.foreignTongue = this.pages[100] // Or however you set this
+      // ... any other logic to update your texts
+      this.resetTyping()
+    }
   }
 
   ngAfterViewInit(): void {
@@ -81,9 +82,13 @@ export class TypingAreaComponent implements OnInit, AfterViewInit {
   }
 
   resetTyping() {
+    if (!this.textsToType[this.language]) {
+      console.warn('No text found for language:', this.language)
+      return
+    }
+
     this.userTyping = ''
     this.startTime = 0
-    // this.mistakeText =
     this.textToType = this.textsToType[this.language]
     this.typedText = ''
     this.currentChar = this.textToType[0]

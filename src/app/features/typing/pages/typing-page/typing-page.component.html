@@ -18,6 +18,7 @@
   >
     <app-typing-stats [language]="Language.NativeTongue"></app-typing-stats>
     <app-typing-area
+      [pages]="englishPages"
       (focus)="setFocus(Language.NativeTongue)"
       [language]="Language.NativeTongue"
       (typingCompleted)="switchFocusToForeignTongue()"
@@ -37,6 +38,7 @@
   >
     <app-typing-stats [language]="Language.ForeignTongue"></app-typing-stats>
     <app-typing-area
+      [pages]="germanPages"
       (focus)="setFocus(Language.ForeignTongue)"
       [language]="Language.ForeignTongue"
       [autoFocus]="false"
