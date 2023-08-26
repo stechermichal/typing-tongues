@@ -13,9 +13,7 @@ import {
   ViewChild,
 } from '@angular/core'
 
-import { BookService } from 'src/app/core/services/book.service'
 import { TypingService } from 'src/app/core/services/typing.service'
-import { Language } from 'src/app/shared/enums'
 
 @Component({
   selector: 'app-typing-area',
@@ -136,5 +134,10 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
       indexOffset += word.length + 1 // +1 for the space
       return wordObject
     })
+  }
+
+  // this is crucial, as using trackBy for ngFor tells angular how to uniqeuely identify each word or char
+  trackByFn(index: number, item: any): number {
+    return item.indexOffset // unique ID corresponding to the item
   }
 }

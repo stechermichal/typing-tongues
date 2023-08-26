@@ -9,14 +9,16 @@ export class BookService {
   constructor(private http: HttpClient) {}
 
   getEnglishBook(): Observable<string[]> {
-    const url = 'http://localhost:3000/api/englishBook'
+    // const url = 'http://localhost:3000/api/englishBook'
+    const url = 'https://typing-tongues.vercel.app/api/englishBook'
     return this.http
       .get(url, { responseType: 'text' })
       .pipe(map((text) => this.paginateBook(text)))
   }
 
   getGermanBook(): Observable<string[]> {
-    const url = 'http://localhost:3000/api/germanBook'
+    // const url = 'http://localhost:3000/api/germanBook'
+    const url = 'https://typing-tongues.vercel.app/api/germanBook'
     return this.http
       .get(url, { responseType: 'text' })
       .pipe(map((text) => this.paginateBook(text)))
@@ -26,7 +28,7 @@ export class BookService {
     let cleanedText = rawText.replace(/\n/g, ' ').replace(/\r/g, ' ')
     cleanedText = cleanedText.replace(/  +/g, ' ')
 
-    const charsPerPage = 200
+    const charsPerPage = 1000
     const pages = []
 
     let i = 0
