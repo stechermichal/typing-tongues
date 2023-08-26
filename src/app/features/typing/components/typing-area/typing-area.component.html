@@ -3,42 +3,95 @@
 >
   <div class="rounded bg-bg-component p-8 shadow-md">
     <div class="relative flex flex-wrap font-mono text-xl">
-      <ng-container *ngFor="let char of textToType.split(''); let i = index">
-        <div class="character-wrapper leading-none">
-          <!-- Display correctly typed characters or show expected character in error color if a typo is made -->
-          <span
-            *ngIf="i < typedText.length"
-            [ngClass]="
-              mistakeText[i] && char !== userTyping[i]
-                ? 'text-text-error'
-                : 'text-text-typed'
+      <ng-container
+        *ngFor="let processedWord of getProcessedWords(); let wordIndex = index"
+      >
+        <span class="word" style="white-space: nowrap">
+          <ng-container
+            *ngFor="
+              let char of processedWord.word.split('');
+              let charIndex = index
             "
-            >{{ char }}</span
           >
-
-          <!-- Due to how margin works with inline elements, bottom margin doesn't move the element itself, but rather the content
-          following it - hence the negative top margin instead -->
+            <div class="character-wrapper leading-none">
+              <span
+                *ngIf="processedWord.indexOffset + charIndex < typedText.length"
+                [ngClass]="
+                  mistakeText[processedWord.indexOffset + charIndex] &&
+                  char !== userTyping[processedWord.indexOffset + charIndex]
+                    ? 'text-text-error'
+                    : 'text-text-typed'
+                "
+              >
+                {{ char }}
+              </span>
+              <span
+                *ngIf="
+                  processedWord.indexOffset + charIndex === typedText.length &&
+                  isFocused
+                "
+                class="absolute -mt-1 mr-3.5 inline-block h-[1.25em] w-[0.1px] animate-blink bg-text-highlight"
+              ></span>
+              <span
+                *ngIf="
+                  processedWord.indexOffset + charIndex === typedText.length
+                "
+                class="text-text-highlight"
+              >
+                {{ char === ' ' ? '_' : char }}
+              </span>
+              <span
+                *ngIf="processedWord.indexOffset + charIndex > typedText.length"
+                class="text-text-to-type"
+              >
+                {{ char }}
+              </span>
+              <div
+                [innerHTML]="
+                  mistakeText[processedWord.indexOffset + charIndex] || '&nbsp;'
+                "
+                class="tighter-leading text-base text-main-mute-color"
+              ></div>
+            </div>
+          </ng-container>
+        </span>
+        <!-- Special case to handle the space character after the word -->
+        <span class="character-wrapper leading-none">
           <span
-            *ngIf="i === typedText.length && isFocused"
+            *ngIf="
+              processedWord.indexOffset + processedWord.word.length <=
+              typedText.length
+            "
+            class="text-text-typed"
+          >
+            &nbsp;
+          </span>
+          <span
+            *ngIf="
+              processedWord.indexOffset + processedWord.word.length ===
+                typedText.length && isFocused
+            "
             class="absolute -mt-1 mr-3.5 inline-block h-[1.25em] w-[0.1px] animate-blink bg-text-highlight"
           ></span>
-
-          <!-- Display the next expected character -->
-          <span *ngIf="i === typedText.length" class="text-text-highlight">{{
-            char === ' ' ? '_' : char
-          }}</span>
-
-          <!-- Display the remaining characters to be typed -->
-          <span *ngIf="i > typedText.length" class="text-text-to-type">{{
-            char
-          }}</span>
-
-          <!-- Display the mistyped character below the expected character -->
-          <div
-            [innerHTML]="mistakeText[i] || '&nbsp;'"
-            class="tighter-leading text-base text-main-mute-color"
-          ></div>
-        </div>
+          <span
+            *ngIf="
+              processedWord.indexOffset + processedWord.word.length ===
+              typedText.length
+            "
+            class="text-text-highlight"
+          >
+            &nbsp;
+          </span>
+          <span
+            *ngIf="
+              processedWord.indexOffset + processedWord.word.length >
+              typedText.length
+            "
+            class="text-text-to-type"
+          >
+            &nbsp;
+          </span>
+        </span>
       </ng-container>
     </div>
     <textarea

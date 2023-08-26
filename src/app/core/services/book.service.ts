@@ -9,27 +9,17 @@ export class BookService {
   constructor(private http: HttpClient) {}
 
   getEnglishBook(): Observable<string[]> {
-    console.log('Fetching English book...') // Add this line
-
     const url = 'http://localhost:3000/api/englishBook'
-    return this.http.get(url, { responseType: 'text' }).pipe(
-      tap((text) =>
-        console.log('Received book text:', text.substring(4000, 6000))
-      ),
-      map((text) => this.paginateBook(text))
-    )
+    return this.http
+      .get(url, { responseType: 'text' })
+      .pipe(map((text) => this.paginateBook(text)))
   }
 
   getGermanBook(): Observable<string[]> {
-    console.log('Fetching German book...') // Add this line
-
     const url = 'http://localhost:3000/api/germanBook'
-    return this.http.get(url, { responseType: 'text' }).pipe(
-      tap((text) =>
-        console.log('Received book text:', text.substring(4000, 6000))
-      ),
-      map((text) => this.paginateBook(text))
-    )
+    return this.http
+      .get(url, { responseType: 'text' })
+      .pipe(map((text) => this.paginateBook(text)))
   }
 
   private paginateBook(rawText: string): string[] {

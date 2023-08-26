@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -35,7 +34,6 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()
   set language(val: 'nativeTongue' | 'foreignTongue') {
     this._language = val
-    // this.resetTyping()
   }
   get language(): 'nativeTongue' | 'foreignTongue' {
     return this._language
@@ -56,21 +54,14 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   isFocused = false
   @Input() pages: string[] = []
 
-  constructor(
-    private typingService: TypingService,
-    private bookService: BookService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor(private typingService: TypingService) {}
 
-  ngOnInit(): void {
-    // this.fetchTexts()
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ('pages' in changes) {
-      this.textsToType.nativeTongue = this.pages[100]
-      this.textsToType.foreignTongue = this.pages[100] // Or however you set this
-      // ... any other logic to update your texts
+      this.textsToType.nativeTongue = this.pages[20]
+      this.textsToType.foreignTongue = this.pages[20]
       this.resetTyping()
     }
   }
@@ -83,7 +74,6 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
 
   resetTyping() {
     if (!this.textsToType[this.language]) {
-      console.warn('No text found for language:', this.language)
       return
     }
 
@@ -134,5 +124,17 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   onBlur() {
     this.isFocused = false
     this.blur.emit()
+  }
+
+  getProcessedWords() {
+    let indexOffset = 0
+    return this.textToType.split(' ').map((word) => {
+      const wordObject = {
+        word,
+        indexOffset,
+      }
+      indexOffset += word.length + 1 // +1 for the space
+      return wordObject
+    })
   }
 }

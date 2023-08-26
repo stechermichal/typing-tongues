@@ -2,7 +2,7 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  white-space: pre;
+  white-space: normal;
 }
 .tighter-leading {
   margin-bottom: -0.2em;
@@ -14,24 +14,4 @@
   left: 0;
   opacity: 0;
   z-index: -1;
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-.next-char::after {
-  content: '';
-  display: inline-block;
-  width: 0.1px;
-  height: 1.25em;
-  background-color: var(--highlight-color, #fff);
-  animation: blink 1s infinite;
-  vertical-align: bottom;
 }
