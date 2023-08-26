@@ -19,7 +19,7 @@
           <!-- Due to how margin works with inline elements, bottom margin doesn't move the element itself, but rather the content
           following it - hence the negative top margin instead -->
           <span
-            *ngIf="i === typedText.length"
+            *ngIf="i === typedText.length && isFocused"
             class="absolute -mt-1 mr-3.5 inline-block h-[1.25em] w-[0.1px] animate-blink bg-text-highlight"
           ></span>
 
