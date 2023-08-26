@@ -1,17 +1,21 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core'
+
+import { BookService } from 'src/app/core/services/book.service'
 import { TypingService } from 'src/app/core/services/typing.service'
-import { TypingStatus } from 'src/app/shared/enums'
+import { Language } from 'src/app/shared/enums'
 
 @Component({
   selector: 'app-typing-area',
@@ -20,31 +24,46 @@ import { TypingStatus } from 'src/app/shared/enums'
   changeDetection: ChangeDetectionStrategy.OnPush, // This is more efficient with how often we update here, but has extra requirements
   // with @Input and child components.sIf there is an issue with updating something, this might be the culprit.
 })
-export class TypingAreaComponent implements OnInit {
+export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('hiddenInput') hiddenInput!: ElementRef
   @Output() focus = new EventEmitter<void>()
   @Output() blur = new EventEmitter<void>()
-  @Input() autoFocus = true
-  @Input() language: 'nativeTongue' | 'foreignTongue' = 'nativeTongue'
+  @Output() typingCompleted = new EventEmitter<void>()
 
-  mistakeText = ''
+  private _language: 'nativeTongue' | 'foreignTongue' = 'nativeTongue'
+  @Input()
+  set language(val: 'nativeTongue' | 'foreignTongue') {
+    this._language = val
+  }
+  get language(): 'nativeTongue' | 'foreignTongue' {
+    return this._language
+  }
+  @Input() autoFocus = true
+
+  mistakeText: string[] = []
   userTyping: string = ''
   startTime: number = 0
-  textToType: string = 'the quick brown fox jumps over the lazy dog.'
+  textsToType = {
+    nativeTongue: '',
+    foreignTongue: '',
+  }
+  textToType: string = this.textsToType[this.language]
   typedText: string = ''
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
-  correctTyping: string = ''
-  typingStatusEnum = TypingStatus // Expose the enum to the template
   isFocused = false
+  @Input() pages: string[] = []
 
-  constructor(
-    private typingService: TypingService,
-    private cd: ChangeDetectorRef
-  ) {}
+  constructor(private typingService: TypingService) {}
 
-  ngOnInit(): void {
-    this.resetTyping()
+  ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ('pages' in changes) {
+      this.textsToType.nativeTongue = this.pages[20]
+      this.textsToType.foreignTongue = this.pages[20]
+      this.resetTyping()
+    }
   }
 
   ngAfterViewInit(): void {
@@ -54,53 +73,35 @@ export class TypingAreaComponent implements OnInit {
   }
 
   resetTyping() {
+    if (!this.textsToType[this.language]) {
+      return
+    }
+
     this.userTyping = ''
     this.startTime = 0
-    this.mistakeText = ''
+    this.textToType = this.textsToType[this.language]
+    this.typedText = ''
     this.currentChar = this.textToType[0]
     this.remainingText = this.textToType.slice(1)
-    this.correctTyping = ''
   }
 
-  // Event handler for user typing. This is triggered every time the user types something.
-  @HostListener('input', ['$event'])
-  onUserType(event: Event) {
-    const inputElement = event.target as HTMLInputElement // Extract the target element of the event
-    this.userTyping = inputElement.value // Update userTyping with the current value of the input element
-
-    this.correctTyping = ''
-    this.mistakeText = ''
-
-    // If the current character the user has typed doesn't match the expected character...
+  onUserType() {
     for (let i = 0; i < this.userTyping.length; i++) {
-      // Current character the user has typed doesn't match the expected character
-      if (this.userTyping[i] !== this.textToType[i]) {
-        // ...then we append an 'Incorrect' status to our tracking string.
-        // The 'correctTyping' string acts as a tracker of the user's typing accuracy.
-        // For example, if the user types "thi" when the expected text is "the", the 'correctTyping' string will be "110",
-        // indicating the user typed the first two characters correctly and the third one incorrectly.
-        this.correctTyping += TypingStatus.Incorrect // Indicate an error has occurred
-        // Additionally, we add the incorrect character to the 'mistakeText' string.
-        // This will help in visually indicating which characters were mistyped.
-        this.mistakeText += this.userTyping[i]
-      } else {
-        // If the character matches the expected character, we append a 'Correct' status to our tracking string.
-        this.correctTyping += TypingStatus.Correct
-        // To ensure the 'mistakeText' visually aligns with the original text, we add a non-breaking space for correctly typed characters.
-        // This way, when overlaying the 'mistakeText' over the original text, the characters will line up correctly,
-        // and only the mistakes will be visible.
-        this.mistakeText += '&nbsp;'
-      }
+      this.mistakeText[i] =
+        this.userTyping[i] !== this.textToType[i]
+          ? this.userTyping[i]
+          : '&nbsp;'
     }
 
     this.typedText = this.textToType.slice(0, this.userTyping.length)
+    this.currentChar = this.textToType[this.userTyping.length] || ''
+    this.remainingText = this.textToType.slice(this.userTyping.length + 1)
 
-    if (!this.startTime) {
-      this.startTime = new Date().getTime()
+    if (this.userTyping === this.textToType) {
+      this.typingCompleted.emit()
     }
 
-    this.currentChar = this.textToType[this.typedText.length]
-    this.remainingText = this.textToType.slice(this.typedText.length + 1)
+    if (!this.startTime) this.startTime = new Date().getTime()
 
     this.typingService.updateStats(
       this.userTyping,
@@ -108,8 +109,6 @@ export class TypingAreaComponent implements OnInit {
       this.startTime,
       this.language
     )
-
-    this.cd.detectChanges()
   }
 
   @HostListener('click')
@@ -119,13 +118,23 @@ export class TypingAreaComponent implements OnInit {
 
   onFocus() {
     this.isFocused = true
-
     this.focus.emit()
   }
 
   onBlur() {
     this.isFocused = false
-
     this.blur.emit()
+  }
+
+  getProcessedWords() {
+    let indexOffset = 0
+    return this.textToType.split(' ').map((word) => {
+      const wordObject = {
+        word,
+        indexOffset,
+      }
+      indexOffset += word.length + 1 // +1 for the space
+      return wordObject
+    })
   }
 }

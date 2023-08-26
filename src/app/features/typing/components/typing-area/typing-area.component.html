@@ -1,45 +1,104 @@
 <div
-  class="flex min-h-screen flex-col items-center justify-center bg-bg-general py-6"
+  class="flex min-h-screen flex-col items-center justify-center bg-bg-general px-5 py-32"
 >
   <div class="rounded bg-bg-component p-8 shadow-md">
-    <p class="relative font-mono text-xl">
-      <!-- Iterate over each character of the typed text -->
-      <ng-container *ngFor="let char of typedText.split(''); let i = index">
-        <span
-          [ngClass]="{
-            'text-text-error': correctTyping[i] === typingStatusEnum.Incorrect,
-            'text-text-typed': correctTyping[i] === typingStatusEnum.Correct,
-          }"
-          >{{ char }}</span
-        >
+    <div class="relative flex flex-wrap font-mono text-xl">
+      <ng-container
+        *ngFor="let processedWord of getProcessedWords(); let wordIndex = index"
+      >
+        <span class="word" style="white-space: nowrap">
+          <ng-container
+            *ngFor="
+              let char of processedWord.word.split('');
+              let charIndex = index
+            "
+          >
+            <div class="character-wrapper leading-none">
+              <span
+                *ngIf="processedWord.indexOffset + charIndex < typedText.length"
+                [ngClass]="
+                  mistakeText[processedWord.indexOffset + charIndex] &&
+                  char !== userTyping[processedWord.indexOffset + charIndex]
+                    ? 'text-text-error'
+                    : 'text-text-typed'
+                "
+              >
+                {{ char }}
+              </span>
+              <span
+                *ngIf="
+                  processedWord.indexOffset + charIndex === typedText.length &&
+                  isFocused
+                "
+                class="absolute -mt-1 mr-3.5 inline-block h-[1.25em] w-[0.1px] animate-blink bg-text-highlight"
+              ></span>
+              <span
+                *ngIf="
+                  processedWord.indexOffset + charIndex === typedText.length
+                "
+                class="text-text-highlight"
+              >
+                {{ char === ' ' ? '_' : char }}
+              </span>
+              <span
+                *ngIf="processedWord.indexOffset + charIndex > typedText.length"
+                class="text-text-to-type"
+              >
+                {{ char }}
+              </span>
+              <div
+                [innerHTML]="
+                  mistakeText[processedWord.indexOffset + charIndex] || '&nbsp;'
+                "
+                class="tighter-leading text-base text-main-mute-color"
+              ></div>
+            </div>
+          </ng-container>
+        </span>
+        <!-- Special case to handle the space character after the word -->
+        <span class="character-wrapper leading-none">
+          <span
+            *ngIf="
+              processedWord.indexOffset + processedWord.word.length <=
+              typedText.length
+            "
+            class="text-text-typed"
+          >
+            &nbsp;
+          </span>
+          <span
+            *ngIf="
+              processedWord.indexOffset + processedWord.word.length ===
+                typedText.length && isFocused
+            "
+            class="absolute -mt-1 mr-3.5 inline-block h-[1.25em] w-[0.1px] animate-blink bg-text-highlight"
+          ></span>
+          <span
+            *ngIf="
+              processedWord.indexOffset + processedWord.word.length ===
+              typedText.length
+            "
+            class="text-text-highlight"
+          >
+            &nbsp;
+          </span>
+          <span
+            *ngIf="
+              processedWord.indexOffset + processedWord.word.length >
+              typedText.length
+            "
+            class="text-text-to-type"
+          >
+            &nbsp;
+          </span>
+        </span>
       </ng-container>
-      <!-- Caret is absolute to not affect the text with its presence, parent is relative because of that -->
-      <span
-        class="absolute inline-block h-[1.25em] w-[0.1px] animate-blink"
-        [ngClass]="{
-          'bg-text-highlight': isFocused,
-          'bg-transparent': !isFocused
-        }"
-        style="bottom: 0.25em"
-      ></span>
-      <!-- The current character to type (spaces are represented by underscores) -->
-      <span class="text-text-highlight">{{
-        currentChar === ' ' ? '_' : currentChar
-      }}</span>
-      <span class="text-text-to-type">{{ remainingText }}</span>
-    </p>
-    <!--  Area for typing mistakes -->
-    <p
-      class="h-[1.5em] whitespace-pre-wrap font-mono text-xl"
-      [innerHTML]="mistakeText"
-      [ngClass]="{ 'text-main-mute-color': mistakeText.length > 0 }"
-    ></p>
-    <!-- Invisible input area for capturing user typing. Its updates trigger the typing mechanism. -->
+    </div>
     <textarea
       #hiddenInput
-      class="absolute opacity-0"
+      class="hidden-input"
       [(ngModel)]="userTyping"
-      (input)="onUserType($event)"
+      (input)="onUserType()"
       (focus)="onFocus()"
       (blur)="onBlur()"
     ></textarea>
