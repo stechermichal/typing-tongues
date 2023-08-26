@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -10,7 +11,9 @@ import {
   Output,
   ViewChild,
 } from '@angular/core'
+import { BookService } from 'src/app/core/services/book.service'
 import { TypingService } from 'src/app/core/services/typing.service'
+import { Language } from 'src/app/shared/enums'
 
 @Component({
   selector: 'app-typing-area',
@@ -40,22 +43,35 @@ export class TypingAreaComponent implements OnInit, AfterViewInit {
   userTyping: string = ''
   startTime: number = 0
   textsToType = {
-    nativeTongue:
-      'Phasellus non orci turpis. Nam facilisis fermentum massa id auctor. Fusce viverra id eros interdum placerat. Quisque ultrices et tellus sed rhoncus. Morbi lacus tortor, congue eu lobortis eu, posuere eget velit. Morbi at nisl at dui blandit placerat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis in tempus nulla, non ullamcorper justo. Cras sit amet lobortis metus, eu accumsan eros. Suspendisse potenti. Duis eget sollicitudin leo. Nulla sit amet est ut mauris viverra hendrerit. Vivamus sem felis, tristique id magna eget, aliquet aliquet diam. Fusce efficitur purus metus, id rhoncus turpis volutpat at. Aliquam erat volutpat. Phasellus non orci turpis. Nam facilisis fermentum massa id auctor. Fusce viverra id eros interdum placerat. Quisque ultrices et tellus sed rhoncus. Morbi lacus tortor, congue eu lobortis eu, posuere eget velit. Morbi at nisl at dui blandit placerat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis in tempus nulla, non ullamcorper justo. Cras sit amet lobortis metus, eu accumsan eros. Suspendisse potenti. Duis eget sollicitudin leo. Nulla sit amet est ut mauris viverra hendrerit. Vivamus sem felis, tristique id magna eget, aliquet aliquet diam. Fusce efficitur purus metus, id rhoncus turpis volutpat at. Aliquam erat volutpat. Phasellus non orci turpis. Nam facilisis fermentum massa id auctor. Fusce viverra id eros interdum placerat. Quisque ultrices et tellus sed rhoncus. Morbi lacus tortor, congue eu lobortis eu, posuere eget velit. Morbi at nisl at dui blandit placerat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis in tempus nulla, non ullamcorper justo. Cras sit amet lobortis metus, eu accumsan eros. Suspendisse potenti. Duis eget sollicitudin leo. Nulla sit amet est ut mauris viverra hendrerit. Vivamus sem felis, tristique id magna eget, aliquet aliquet diam. Fusce efficitur purus metus, id rhoncus turpis volutpat at. Aliquam erat volutpat.',
-    foreignTongue:
-      'phasellus non orci turpis. Nam facilisis fermentum massa id auctor. Fusce viverra id eros interdum placerat. Quisque ultrices et tellus sed rhoncus. Morbi lacus tortor, congue eu lobortis eu, posuere eget velit. Morbi at nisl at dui blandit placerat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis in tempus nulla, non ullamcorper justo. Cras sit amet lobortis metus, eu accumsan eros. Suspendisse potenti. Duis eget sollicitudin leo. Nulla sit amet est ut mauris viverra hendrerit. Vivamus sem felis, tristique id magna eget, aliquet aliquet diam. Fusce efficitur purus metus, id rhoncus turpis volutpat at. Aliquam erat volutpat. Phasellus non orci turpis. Nam facilisis fermentum massa id auctor. Fusce viverra id eros interdum placerat. Quisque ultrices et tellus sed rhoncus. Morbi lacus tortor, congue eu lobortis eu, posuere eget velit. Morbi at nisl at dui blandit placerat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis in tempus nulla, non ullamcorper justo. Cras sit amet lobortis metus, eu accumsan eros. Suspendisse potenti. Duis eget sollicitudin leo. Nulla sit amet est ut mauris viverra hendrerit. Vivamus sem felis, tristique id magna eget, aliquet aliquet diam. Fusce efficitur purus metus, id rhoncus turpis volutpat at. Aliquam erat volutpat. Phasellus non orci turpis. Nam facilisis fermentum massa id auctor. Fusce viverra id eros interdum placerat. Quisque ultrices et tellus sed rhoncus. Morbi lacus tortor, congue eu lobortis eu, posuere eget velit. Morbi at nisl at dui blandit placerat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis in tempus nulla, non ullamcorper justo. Cras sit amet lobortis metus, eu accumsan eros. Suspendisse potenti. Duis eget sollicitudin leo. Nulla sit amet est ut mauris viverra hendrerit. Vivamus sem felis, tristique id magna eget, aliquet aliquet diam. Fusce efficitur purus metus, id rhoncus turpis volutpat at. Aliquam erat volutpat.',
+    nativeTongue: '',
+    foreignTongue: 'test',
   }
   textToType: string = this.textsToType[this.language]
   typedText: string = ''
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
   isFocused = false
+  pages: string[] = []
 
-  constructor(private typingService: TypingService) {}
+  constructor(
+    private typingService: TypingService,
+    private bookService: BookService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.mistakeText = Array(this.textToType.length).fill('&nbsp;')
-    this.resetTyping()
+    this.bookService.getEnglishBook().subscribe(
+      (pages) => {
+        this.pages = pages
+        this.textsToType.nativeTongue = this.pages[5]
+        this.mistakeText = Array(this.textToType.length).fill('&nbsp;')
+        this.resetTyping()
+        this.changeDetectorRef.detectChanges()
+      },
+      (error) => {
+        console.error('Failed to fetch book', error)
+      }
+    )
   }
 
   ngAfterViewInit(): void {
