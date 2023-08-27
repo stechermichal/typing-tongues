@@ -3,11 +3,12 @@
   flex-direction: column;
   align-items: center;
   white-space: normal;
+  line-height: 0.3;
 }
 .tighter-leading {
-  margin-bottom: -0.2em;
-  margin-top: -0.2em;
+  margin-bottom: -0.5em;
 }
+
 .hidden-input {
   position: absolute;
   top: 0;
