@@ -1,10 +1,12 @@
 .character-wrapper {
+  position: relative;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   white-space: normal;
   line-height: 0.3;
 }
+
 .tighter-leading {
   margin-bottom: -0.5em;
 }
@@ -15,4 +17,9 @@
   left: 0;
   opacity: 0;
   z-index: -1;
+}
+
+.absolute {
+  position: absolute;
+  top: -0.3em;
 }
