@@ -42,7 +42,8 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   userTyping: string = ''
   startTime: number = 0
   textsToType = {
-    nativeTongue: '',
+    nativeTongue:
+      'this is crucial, as using trackBy for ngFor tells angular how to uniqeuely identify each word or char',
     foreignTongue: '',
   }
   textToType: string = this.textsToType[this.language]
@@ -89,6 +90,15 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
         this.userTyping[i] !== this.textToType[i]
           ? this.userTyping[i]
           : '&nbsp;'
+    }
+
+    // make sure we show mistake under where space is supposd to be too
+    if (
+      this.textToType[this.userTyping.length] === ' ' &&
+      this.userTyping.length < this.textToType.length
+    ) {
+      this.mistakeText[this.userTyping.length] =
+        this.userTyping[this.userTyping.length] || ''
     }
 
     this.typedText = this.textToType.slice(0, this.userTyping.length)

@@ -94,6 +94,22 @@
             >
               &nbsp;
             </span>
+            <!-- make sure we show mistake under where space is supposd to be too -->
+            <div
+              *ngIf="
+                processedWord.indexOffset + processedWord.word.length <=
+                typedText.length
+              "
+              class="tighter-leading text-base text-main-mute-color"
+            >
+              <div
+                [innerHTML]="
+                  mistakeText[
+                    processedWord.indexOffset + processedWord.word.length
+                  ] || ''
+                "
+              ></div>
+            </div>
           </div>
         </span>
       </ng-container>
