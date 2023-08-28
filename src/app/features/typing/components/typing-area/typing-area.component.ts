@@ -92,13 +92,18 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
           : '&nbsp;'
     }
 
-    // make sure we show mistake under where space is supposd to be too
+    // Handle space mistypes
     if (
       this.textToType[this.userTyping.length] === ' ' &&
       this.userTyping.length < this.textToType.length
     ) {
       this.mistakeText[this.userTyping.length] =
         this.userTyping[this.userTyping.length] || ''
+    }
+
+    // Trim down the mistakeText array if needed
+    if (this.mistakeText.length > this.userTyping.length) {
+      this.mistakeText = this.mistakeText.slice(0, this.userTyping.length)
     }
 
     this.typedText = this.textToType.slice(0, this.userTyping.length)
