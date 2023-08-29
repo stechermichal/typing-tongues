@@ -155,4 +155,14 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   trackByFn(index: number, item: any): number {
     return item.indexOffset // unique ID corresponding to the item
   }
+
+  getTypingClass(indexOffset: number, charIndex: number, char: string): string {
+    if (
+      this.mistakeText[indexOffset + charIndex] &&
+      char !== this.userTyping[indexOffset + charIndex]
+    ) {
+      return 'text-text-error'
+    }
+    return 'text-text-typed'
+  }
 }
