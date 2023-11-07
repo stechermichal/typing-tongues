@@ -4,11 +4,7 @@
   <div class="rounded bg-bg-component p-8 shadow-md">
     <div class="relative flex flex-wrap font-mono text-xl">
       <ng-container
-        *ngFor="
-          let processedWord of getProcessedWords();
-          trackBy: trackByFn;
-          let wordIndex = index
-        "
+        *ngFor="let processedWord of getProcessedWords(); trackBy: trackByFn"
       >
         <span class="word" style="white-space: nowrap">
           <ng-container
@@ -21,10 +17,7 @@
               <span
                 *ngIf="processedWord.indexOffset + charIndex < typedText.length"
                 [ngClass]="
-                  mistakeText[processedWord.indexOffset + charIndex] &&
-                  char !== userTyping[processedWord.indexOffset + charIndex]
-                    ? 'text-text-error'
-                    : 'text-text-typed'
+                  getTypingClass(processedWord.indexOffset, charIndex, char)
                 "
               >
                 {{ char }}
