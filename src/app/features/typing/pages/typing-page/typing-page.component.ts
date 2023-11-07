@@ -23,11 +23,11 @@ export class TypingPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.bookService.getEnglishBook().subscribe((pages) => {
+    this.bookService.getEnglishBook(1000).subscribe((pages) => {
       this.englishPages = pages
       // Fetch the German pages too, if you want
     })
-    this.bookService.getGermanBook().subscribe((pages) => {
+    this.bookService.getGermanBook(1000).subscribe((pages) => {
       this.germanPages = pages
     })
   }
