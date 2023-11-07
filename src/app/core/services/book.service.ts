@@ -41,7 +41,7 @@ export class BookService {
     let cleanedText = rawText.replace(/\n/g, ' ').replace(/\r/g, ' ')
     cleanedText = cleanedText.replace(/  +/g, ' ')
 
-    const charsPerPage = 509
+    const charsPerPage = 500
     const pages = []
 
     let i = 0
