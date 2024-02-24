@@ -24,6 +24,8 @@ Typing Tongues is an interactive web application to help users improve their typ
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
+Local development also has to run `vercel dev` that will run on localhost:3000
+
 ## Usage
 
 Instructions on how to use the project.
