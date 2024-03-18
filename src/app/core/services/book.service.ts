@@ -9,16 +9,17 @@ export class BookService {
   constructor(private http: HttpClient) {}
 
   getEnglishBook(): Observable<string[]> {
-    // const url = 'http://localhost:3000/api/englishBook'
-    const url = 'https://typing-tongues.vercel.app/api/englishBook'
-    return this.http
-      .get(url, { responseType: 'text' })
-      .pipe(map((text) => this.paginateBook(text)))
+    const url = 'http://localhost:3000/api/englishBook'
+    // const url = 'https://typing-tongues.vercel.app/api/englishBook'
+    return this.http.get(url, { responseType: 'text' }).pipe(
+      tap((text) => console.log(text)),
+      map((text) => this.paginateBook(text))
+    )
   }
 
   getGermanBook(): Observable<string[]> {
-    // const url = 'http://localhost:3000/api/germanBook'
-    const url = 'https://typing-tongues.vercel.app/api/germanBook'
+    const url = 'http://localhost:3000/api/germanBook'
+    // const url = 'https://typing-tongues.vercel.app/api/germanBook'
     return this.http
       .get(url, { responseType: 'text' })
       .pipe(map((text) => this.paginateBook(text)))
