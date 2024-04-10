@@ -42,8 +42,7 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   userTyping: string = ''
   startTime: number = 0
   textsToType = {
-    nativeTongue:
-      'this is crucial, as using trackBy for ngFor tells angular how to uniqeuely identify each word or char',
+    nativeTongue: 'temporary test text to display before the book text loads',
     foreignTongue: '',
   }
   textToType: string = this.textsToType[this.language]
@@ -51,6 +50,8 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   currentChar = this.textToType[0]
   remainingText = this.textToType.slice(1)
   isFocused = false
+  currentPageIndex: number = 0
+
   @Input() pages: string[] = []
 
   constructor(private typingService: TypingService) {}
@@ -72,6 +73,8 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   resetTyping() {
+    const currentPageText = this.pages[this.currentPageIndex]
+    this.textsToType[this.language] = currentPageText || 'End of book.'
     if (!this.textsToType[this.language]) {
       return
     }
@@ -164,5 +167,14 @@ export class TypingAreaComponent implements OnInit, AfterViewInit, OnChanges {
       return 'text-text-error'
     }
     return 'text-text-typed'
+  }
+
+  goToNextPage() {
+    if (this.currentPageIndex < this.pages.length - 1) {
+      this.currentPageIndex++
+      this.resetTyping()
+    } else {
+      alert("You've reached the end of the book!")
+    }
   }
 }
