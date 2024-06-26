@@ -20,9 +20,10 @@ export class BookService {
   getGermanBook(): Observable<string[]> {
     const url = 'http://localhost:3000/api/germanBook'
     // const url = 'https://typing-tongues.vercel.app/api/germanBook'
-    return this.http
-      .get(url, { responseType: 'text' })
-      .pipe(map((text) => this.paginateBook(text)))
+    return this.http.get(url, { responseType: 'text' }).pipe(
+      tap((text) => console.log(text)),
+      map((text) => this.paginateBook(text))
+    )
   }
 
   private paginateBook(rawText: string): string[] {

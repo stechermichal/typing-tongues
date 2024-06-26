@@ -19,6 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const response = await fetch(bookUrl)
     const bookText = await response.text()
+    console.log(bookText.length) // Add this line
     res.status(200).send(bookText)
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch the book.' })
