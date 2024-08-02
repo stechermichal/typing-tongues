@@ -1,26 +1,25 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { Observable, map, tap } from 'rxjs'
+import { Observable, map } from 'rxjs'
+import { environment } from '../../../environments/environment'
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookService {
+  private apiUrl = environment.apiUrl
+
   constructor(private http: HttpClient) {}
 
   getEnglishBook(): Observable<string[]> {
-    // const url = 'http://localhost:3000/api/englishBook'
-    const url = 'https://typing-tongues.vercel.app/api/englishBook'
     return this.http
-      .get(url, { responseType: 'text' })
+      .get(`${this.apiUrl}/englishbook`, { responseType: 'text' })
       .pipe(map((text) => this.paginateBook(text)))
   }
 
   getGermanBook(): Observable<string[]> {
-    // const url = 'http://localhost:3000/api/germanBook'
-    const url = 'https://typing-tongues.vercel.app/api/germanBook'
     return this.http
-      .get(url, { responseType: 'text' })
+      .get(`${this.apiUrl}/germanbook`, { responseType: 'text' })
       .pipe(map((text) => this.paginateBook(text)))
   }
 
